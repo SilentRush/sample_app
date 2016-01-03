@@ -1,4 +1,4 @@
-require 'HTTParty'
+#require 'HTTParty'
 require 'Nokogiri'
 require 'JSON'
 require 'Pry'
@@ -63,7 +63,7 @@ class TournamentGenerator
           currMatch = GameMatch.new(i + 1, "", wchar, "", lchar, "", "")
           matches.push(currMatch)
         end
-        matches.push(currMatch = GameMatch.new) if matches.empty? 
+        matches.push(currMatch = GameMatch.new) if matches.empty?
         currSet = GameSet.new(setNum, winner, loser, wscore, lscore, matches)
         round.addSet currSet
       end
