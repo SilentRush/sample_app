@@ -3,6 +3,7 @@ require 'tournament'
 require 'round'
 require 'gameset'
 require 'gamematch'
+require 'player'
 
 class TournamentGenerator
 
@@ -27,40 +28,63 @@ class TournamentGenerator
     tournament.tsuffix = tsuffix
     tournament.tdate = tdate
 
+    players = Hash.new
+    @parse_page.css('.match-player-name').each do |player|
+      currPlayer = Player.new ()
+      currPlayer.gamertag = player.text
+      players[currPlayer.gamertag] = currPlayer
+    end
+    tournament.players = players
+
     @parse_page.css('.bracket-content').css('.bracket-section').css('.bracket-round').each do |a|
       roundname = a.css('.bracket-round-heading').text.downcase.tr(" ", "_")
       roundname.include?("progression") ? next : round = Round.new(roundname)
       a.css('.match-affix-wrapper').map.each_with_index do |match, index|
         #create set
         setNum = (index + 1).to_s
+
         winner = match.css('.winner').css('.match-player-name').text
         img = match.css('.winner').css('.match-character').css('img')
-        characters = []
+        wchars = []
         img.each do |link|
           character = MeleeCharacter.new(link['src'].split("/").last)
-          characters.push(character.get_character)
+          wchars.push(character.get_character)
         end
-        characters.empty? ? wchar = "" : wchar = characters.join(",")
+
         loser = match.css('.loser').css('.match-player-name').text
-        characters = []
+        lchars = []
         img = match.css('.loser').css('.match-character').css('img')
         img.each do |link|
           character = MeleeCharacter.new(link['src'].split("/").last)
-          characters.push(character.get_character)
+          lchars.push(character.get_character)
         end
-        characters.empty? ? lchar = "" : lchar = characters.join(",")
-        wscore = match.css('.winner').css('.match-player-stocks').text
-        lscore = match.css('.loser').css('.match-player-stocks').text
+
+        wscore = match.css('.winner').css('.match-player-stocks').text.to_i
+        lscore = match.css('.loser').css('.match-player-stocks').text.to_i
 
         #create matches
         matches = []
         (wscore.to_i + lscore.to_i).times do |i|
-          currMatch = GameMatch.new(i + 1, "", wchar, "", lchar, "", "")
+          currMatch = GameMatch.new(i + 1, "", wchars.join(","), "", lchars.join(","), "", "")
           matches.push(currMatch)
         end
         matches.push(currMatch = GameMatch.new) if matches.empty?
         currSet = GameSet.new(setNum, winner, loser, wscore, lscore, matches)
         round.addSet currSet
+
+        #update player wins and loses
+        players[winner].wins += wscore
+        players[winner].loses += lscore
+        players[loser].wins += lscore
+        players[loser].loses += wscore
+        
+        #update player characters
+        wchars.each do |char|
+          players[winner].characters.push(char) if !char.empty? && !players[winner].characters.include?(char)
+        end
+        lchars.each do |char|
+          players[loser].characters.push(char) if !char.empty? && !players[loser].characters.include?(char)
+        end
       end
       tournament.addRound round
     end

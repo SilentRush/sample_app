@@ -31,6 +31,28 @@
     </tbody>
   </table>
 
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Gamertag</th>
+        <th>Characters</th>
+        <th>W/L</th>
+        <th>Winrate</th>
+      </tr>
+    </thead>
+    <tbody>
+    <% @tournament.players.each do |player| %>
+      <tr>
+          <td><%= player[1].gamertag %></td>
+          <td><%= player[1].characters.join(", ") %></td>
+          <td><%= player[1].wins %> - <%= player[1].loses %></td>
+          <td><%= player[1].calcWinrate
+                  number_to_percentage(player[1].winrate * 100, precision: 2) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
   <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
 </div>
 
