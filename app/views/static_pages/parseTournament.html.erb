@@ -1,9 +1,12 @@
-<div class="center jumbotron">
-  <%= form_tag("/tournaments", method: "post") do %>
-      <div class="form-group">
-        <%= label_tag(:url, "Tournament URL") %>
-        <%= text_field_tag(:url) class: "form-control" %>
-      </div>
-      <%= submit_tag("Create") class: "btn btn-lg btn-primary" %>
-  <% end %>
+<div class="jumbotron">
+  <div class="row">
+    <%= form_tag("/tournaments", method: "post") do %>
+        <div class=".form-group">
+          <%= label_tag(:url, "Tournament URL") %>
+          <%= text_field_tag(:url, nil, class: "form-control") %>
+        </div>
+        <br />
+        <%= submit_tag("Create", class: "btn btn-sm btn-primary") %>
+    <% end %>
+  </div>
 </div>
