@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  matchnum: 1
+  winner: MyString
+  wchar: MyString
+  loser: MyString
+  lchar: MyString
+  wstock: 1
+  lstock: 1
+  gameset_id: 
+
+two:
+  matchnum: 1
+  winner: MyString
+  wchar: MyString
+  loser: MyString
+  lchar: MyString
+  wstock: 1
+  lstock: 1
+  gameset_id: 

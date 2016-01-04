@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  setnum: 1
+  winner: MyString
+  loser: MyString
+  wscore: 1
+  lscore: 1
+  tournament_id: 
+
+two:
+  name: MyString
+  setnum: 1
+  winner: MyString
+  loser: MyString
+  wscore: 1
+  lscore: 1
+  tournament_id: 

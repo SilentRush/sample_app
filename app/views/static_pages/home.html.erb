@@ -1,57 +1,6 @@
 <div class="center jumbotron">
-  <h1><%= @tournament.tname %></h1>
-    <h2><%= @tournament.tsuffix %></h2>
-
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Round</th>
-          <th>Winner</th>
-          <th>loser</th>
-          <th>Score</th>
-          <th>Winner Characters</th>
-          <th>Loser Character</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @tournament.rounds.each do |round| %>
-
-        <% round.sets.each do |set| %>
-        <tr>
-          <td><%= round.roundName.humanize.split.map(&:capitalize).join(' ') %></td>
-            <td><%= set.winner %></td>
-            <td><%= set.loser %></td>
-            <td><%= set.wscore %> - <%= set.lscore %></td>
-            <td><%= set.matches.first.wchar.to_s %></td>
-            <td><%= set.matches.first.lchar.to_s %></td>
-        </tr>
-        <% end %>
-
-      <% end %>
-    </tbody>
-  </table>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Gamertag</th>
-        <th>Characters</th>
-        <th>W/L</th>
-        <th>Winrate</th>
-      </tr>
-    </thead>
-    <tbody>
-    <% @tournament.players.each do |player| %>
-      <tr>
-          <td><%= player[1].gamertag %></td>
-          <td><%= player[1].characters.join(", ") %></td>
-          <td><%= player[1].wins %> - <%= player[1].loses %></td>
-          <td><%= player[1].calcWinrate
-                  number_to_percentage(player[1].winrate * 100, precision: 2) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+  <h1>Home</h1>
+    <h2>Smash App in Development</h2>
 
   <%= link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary" %>
 </div>

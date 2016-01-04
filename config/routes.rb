@@ -1,8 +1,24 @@
 Rails.application.routes.draw do
+  resources :tournaments
+
+  get 'gamesets/new'
+
+  get 'gamesets/create'
+
+  get 'gamematchs/new'
+
+  get 'gamematchs/create'
+
+  get 'players/new'
+
+  get 'players/create'
+
   root             'static_pages#home'
   get 'help'    => 'static_pages#help'
   get 'about'   => 'static_pages#about'
   get 'contact' => 'static_pages#contact'
+  get 'parseTournament' => 'static_pages#parseTournament'
+  get 'createTournament' => 'static_pages#createTournament'
   get 'signup'  => 'users#new'
 
   # The priority is based upon order of creation: first created -> highest priority.

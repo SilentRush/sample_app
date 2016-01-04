@@ -1,0 +1,34 @@
+<div class="center jumbotron">
+  <h1>Tournaments</h1>
+    <h2>List of all Tournaments</h2>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Tournament Name</th>
+          <th>Description</th>
+          <th>Player Count</th>
+          <th>Inserted On</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @tournaments.each do |tournament| %>
+
+        <tr>
+          <td><%= link_to tournament.name, tournament_path(tournament.id) %></td>
+          <td><%= tournament.description %></td>
+          <td><%= eval(tournament.players).length %></td>
+          <td><%= tournament.created_at %></td>
+        </tr>
+
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+
+<%= link_to image_tag("https://cdn2.iconfinder.com/data/icons/social-18/512/Youtube-128.png", alt: "SilentRush Youtube"),
+            'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos' %>
+<%= link_to image_tag("http://drafterita.com/data/uploads/twitch-big-logo.png", alt: "SilentRush Twitch"),
+            'http://www.twitch.tv/silentrush_' %>

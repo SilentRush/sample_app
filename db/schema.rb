@@ -11,7 +11,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160102064653) do
+ActiveRecord::Schema.define(version: 20160103065352) do
+
+  create_table "gamematches", force: :cascade do |t|
+    t.integer  "matchnum"
+    t.string   "winner"
+    t.string   "wchar"
+    t.string   "loser"
+    t.string   "lchar"
+    t.integer  "wstock"
+    t.integer  "lstock"
+    t.integer  "gameset_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "gamematches", ["gameset_id"], name: "index_gamematches_on_gameset_id"
+
+  create_table "gamesets", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "setnum"
+    t.string   "winner"
+    t.string   "loser"
+    t.integer  "wscore"
+    t.integer  "lscore"
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "gamesets", ["tournament_id"], name: "index_gamesets_on_tournament_id"
+
+  create_table "players", force: :cascade do |t|
+    t.string   "gamertag"
+    t.string   "name"
+    t.string   "characters"
+    t.integer  "wins"
+    t.integer  "loses"
+    t.integer  "winrate"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "tournaments", force: :cascade do |t|
+    t.string   "name"
+    t.date     "date"
+    t.string   "description"
+    t.text     "players"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "name"

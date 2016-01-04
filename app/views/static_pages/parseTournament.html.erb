@@ -1,0 +1,7 @@
+<div class="center jumbotron">
+  <%= form_tag("/tournaments", method: "post") do %>
+      <%= label_tag(:url, "Tournament URL") %>
+      <%= text_field_tag(:url) %>
+      <%= submit_tag("Create") %>
+  <% end %>
+</div>

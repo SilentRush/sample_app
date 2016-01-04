@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  gamertag: MyString
+  name: MyString
+  characters: MyString
+  wins: 1
+  loses: 1
+  winrate: 1
+
+two:
+  gamertag: MyString
+  name: MyString
+  characters: MyString
+  wins: 1
+  loses: 1
+  winrate: 1
