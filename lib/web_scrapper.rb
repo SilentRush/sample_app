@@ -15,38 +15,29 @@ def createTournament page
 
   @tournament.name = tname
   @tournament.description = tsuffix
+  @tournament.url = page
   #@tournament.date = tdate
 
-  players = Hash.new
-  playersToTournament = []
+  @playersToTournament = []
+  @sets = []
   @parse_page.css('.match-player-name').each do |player|
-    if !Player.exists?(:gamertag => player.text)
       currPlayer = Player.new(gamertag: player.text, name: "", characters: "", wins: 0, loses: 0, winrate: 0)
       currPlayer.save
-      players[currPlayer.gamertag.to_s] = currPlayer
-      playersToTournament.push(currPlayer.id)
-    else
-      currPlayer = Player.where(gamertag: player.text).first
-      players[currPlayer.gamertag.to_s] = currPlayer
-      playersToTournament.push(currPlayer.id)
-    end
+      @playersToTournament.push(currPlayer) if currPlayer.valid?
   end
-  @tournament.players = playersToTournament
-
-  @tournament.save
 
   @parse_page.css('.bracket-content').css('.bracket-section').css('.bracket-round').each do |a|
     roundname = a.css('.bracket-round-heading').text.downcase.tr(" ", "_")
     a.css('.match-affix-wrapper').map.each_with_index do |match, index|
       #create set
       setNum = (index + 1).to_s
-      winner = ""
+      winner = Player
       if (match.css('.winner').css('.match-player-name').text.blank?)
         match.css('.match-player-name').css('.text-ellipsis').each do |w|
-          !w.text.to_s.eql?(match.css('.loser').css('.match-player-name').text.to_s) ? winner = w.text : next
+          !w.text.to_s.eql?(match.css('.loser').css('.match-player-name').text.to_s) ? winner = Player.find_by(gamertag: w.text) : next
         end
       else
-        winner = match.css('.winner').css('.match-player-name').text
+        winner = Player.find_by(gamertag: match.css('.winner').css('.match-player-name').text)
       end
       img = match.css('.winner').css('.match-character').css('img')
       wchars = []
@@ -54,13 +45,13 @@ def createTournament page
         character = MeleeCharacter.new(link['src'].split("/").last)
         wchars.push(character.get_character)
       end
-      loser = ""
+      loser = Player
       if (match.css('.loser').css('.match-player-name').text.blank?)
         match.css('.match-player-name').css('.text-ellipsis').each do |l|
-          !l.text.to_s.eql?(match.css('.winner').css('.match-player-name').text.to_s) ? loser = l.text : next
+          !l.text.to_s.eql?(match.css('.winner').css('.match-player-name').text.to_s) ? loser = Player.find_by(gamertag: l.text) : next
         end
       else
-        loser = match.css('.loser').css('.match-player-name').text
+        loser = Player.find_by(gamertag: match.css('.loser').css('.match-player-name').text)
       end
       lchars = []
       img = match.css('.loser').css('.match-character').css('img')
@@ -72,48 +63,29 @@ def createTournament page
       wscore = match.css('.winner').css('.match-player-stocks').text.to_i
       lscore = match.css('.loser').css('.match-player-stocks').text.to_i
 
-      currSet = Gameset.new(name: roundname, setnum: setNum, winner: winner, loser: loser, wscore:wscore, lscore:lscore, tournament_id: @tournament.id)
+      currSet = Gameset.new(name: roundname, setnum: setNum, winner: winner, loser: loser, wscore:wscore, lscore:lscore)
       currSet.save
+      winner.gamesets << currSet
+      loser.gamesets << currSet
+      @sets.push(currSet)
       #create matches
       if((wscore.to_i + lscore.to_i).to_i > 0)
         (wscore.to_i + lscore.to_i).times do |i|
-          currMatch = Gamematch.new(matchnum: i + 1, winner: "", wchar: wchars.join(","), loser: "", lchar: lchars.join(","), wstock:"", lstock:"", gameset_id: currSet.id)
+          if(i < wscore)
+            currMatch = Gamematch.new(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"", gameset_id: currSet.id, invalidMatch: false)
+          else
+            currMatch = Gamematch.new(matchnum: i + 1, winner: loser, wchar: wchars.join(","), loser: winner, lchar: lchars.join(","), wstock:"", lstock:"", gameset_id: currSet.id, invalidMatch: false)
+          end
           currMatch.save
         end
       else
-        currMatch = Gamematch.new(matchnum: 1, winner: "", wchar: wchars.join(","), loser: "", lchar: lchars.join(","), wstock:"", lstock:"", gameset_id: currSet.id)
+        currMatch = Gamematch.new(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"", gameset_id: currSet.id, invalidMatch: true)
         currMatch.save
       end
 
-      #update player wins and loses
-      puts currSet.loser + " " + currSet.winner
-      !wscore.blank? ? players[winner].update(wins: players[winner].wins += wscore) : players[winner].update(wins: players[winner].wins += 1)
-      !lscore.blank? ? players[winner].update(loses: players[winner].loses  += lscore) : players[winner].update(loses: players[winner].loses  += 1)
-      !wscore.blank? ? players[loser].update(wins: players[loser].wins  += lscore) : players[loser].update(wins: players[loser].wins  += 1)
-      !lscore.blank? ? players[loser].update(loses: players[loser].loses  += wscore) : players[loser].update(loses: players[loser].loses  += 1)
-
-      #update player characters
-      wchars.each do |char|
-        if !char.to_s.blank? && !players[winner].characters.include?(char)
-          if(players[winner].characters.blank?)
-            players[winner].update(characters: players[winner].characters = char)
-          else
-            players[winner].update(characters: players[winner].characters += "," + char)
-          end
-        end
-      end
-      lchars.each do |char|
-        if !char.to_s.blank? && !players[loser].characters.include?(char)
-          if(players[loser].characters.blank?)
-            players[loser].update(characters: players[loser].characters += "," + char)
-          else
-            players[loser].update(characters: players[loser].characters = char)
-          end
-        end
-      end
-      currSet.tournament = @tournament
     end
   end
+  return @tournament
 end
 
 

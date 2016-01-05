@@ -1,4 +1,7 @@
 <div class="jumbotron">
+  <% flash.each do |key, value| %>
+    <%= content_tag :div, value, class: "flash #{key}" %>
+  <% end %>
   <h1><%= @tournament.name %></h1>
     <h2><%= @tournament.description %></h2>
 
@@ -14,12 +17,12 @@
         </tr>
       </thead>
       <tbody>
-      <% @tournament.gamesets.all.each do |set| %>
+      <% @tournament.gamesets.each do |set| %>
 
         <tr>
           <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
-            <td><%= set.winner %></td>
-            <td><%= set.loser %></td>
+            <td><%= set.winner.gamertag.to_s %></td>
+            <td><%= set.loser.gamertag.to_s %></td>
             <td><%= set.wscore %> - <%= set.lscore %></td>
             <td><%= set.gamematches.first.wchar %></td>
             <td><%= set.gamematches.first.lchar %></td>
@@ -39,13 +42,26 @@
       </tr>
     </thead>
     <tbody>
-  <% eval(@tournament.players).each do |i|
-    @player = Player.find(i.to_i)%>
+  <% @tournament.players.each do |player| %>
     <tr>
-        <td><%= @player.gamertag %></td>
-        <td><%= @player.characters %></td>
-        <td><%= @player.wins %> - <%= @player.loses %></td>
-        <td><%= @player.loses == 0 ? number_to_percentage(1 * 100, precision: 2) : number_to_percentage((@player.wins.to_f / (@player.loses + @player.wins)) * 100, precision: 2) %></td>
+        <td><%= player.gamertag %></td>
+        <td><%= player.characters %></td>
+        <% @wins = 0
+               @loses = 0
+              player.gamesets.where(tournament_id: @tournament.id).each do |set|
+                if player == set.winner
+                  puts @wins.to_s + set.winner.gamertag.to_s
+                  @wins += set.wscore.to_i
+                  @loses += set.lscore
+                else
+                  @wins += set.lscore
+                  @loses += set.wscore
+                end
+               end %>
+        <td><%= @wins %> - <%= @loses %></td>
+        <td>
+            <%= number_to_percentage((@wins.to_f / (@loses + @wins)) * 100, precision: 2) %>
+             </td>
     </tr>
   <% end %>
 </tbody>
