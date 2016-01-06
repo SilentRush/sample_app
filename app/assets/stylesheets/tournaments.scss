@@ -20,6 +20,9 @@ a:active {
   tr:hover {
     background-color: rgba(76, 175, 80, 0.12)
   }
+  tr:hover .clickable-row.even {
+    background-color: rgba(76, 175, 80, 0.12)
+  }
   tr.clickable-row.even {
       background-color: #F9F9F9
   }
