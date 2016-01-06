@@ -23,7 +23,11 @@ a:active {
   tr.clickable-row.even {
       background-color: #F9F9F9
   }
-  th {
+  th.main {
+    background-color: #3584B9;
+    color: white;
+  }
+  th.inner {
     background-color: #4CAF50;
     color: white;
   }
