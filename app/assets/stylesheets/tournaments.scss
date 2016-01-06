@@ -33,9 +33,6 @@ a:active {
   tr:hover {
     background-color: rgba(76, 175, 80, 0.12)
   }
-  tr:nth-child(even) {
-    background-color: #F9F9F9
-  }
   th {
     background-color: #4CAF50;
     color: white;
@@ -45,9 +42,6 @@ a:active {
 .table {
   tr:hover {
     background-color: rgba(76, 175, 80, 0.12)
-  }
-  tr:nth-child(even) {
-    background-color: #F9F9F9
   }
   th {
     background-color: #3584B9;
