@@ -19,7 +19,7 @@
       <tbody>
       <% @tournament.gamesets.each_with_index do |set, index| %>
 
-        <tr class="clickable-row <%= (index % 2) == 0 ? "even" : "odd" %>" data-id="row<%= index %>">
+        <tr class="clickable-row <%= ((index + 1) % 2) == 0 ? "even" : "odd" %>" data-id="row<%= index %>">
           <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
             <td><%= set.winner.gamertag.to_s %></td>
             <td><%= set.loser.gamertag.to_s %></td>
