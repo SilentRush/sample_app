@@ -23,11 +23,13 @@ ActiveRecord::Schema.define(version: 20160105032841) do
     t.integer  "lstock"
     t.boolean  "invalidMatch"
     t.integer  "gameset_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "tournament_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   add_index "gamematches", ["gameset_id"], name: "index_gamematches_on_gameset_id"
+  add_index "gamematches", ["tournament_id"], name: "index_gamematches_on_tournament_id"
 
   create_table "gamematches_players", id: false, force: :cascade do |t|
     t.integer "player_id"

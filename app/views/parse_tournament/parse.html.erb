@@ -1,0 +1,16 @@
+<div class="jumbotron">
+  <% flash.each do |key, value| %>
+    <%= content_tag :div, value, class: "flash #{key}" %>
+  <% end %>
+
+  <div class="row getP">
+    <%= form_tag("/parseTournament/players", method: "post") do %>
+        <div class=".form-group">
+          <%= label_tag(:url, "Tournament URL") %>
+          <%= text_field_tag(:url, nil, class: "form-control") %>
+        </div>
+        <br />
+        <%= submit_tag("Get Players", class: "btn btn-sm btn-primary", name: "method") %>
+    <% end %>
+  </div>
+</div>

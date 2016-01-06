@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'parseTournament' => 'parse_tournament#parse'
+  post 'parseTournament' => 'parse_tournament#parse'
+
+  get 'parseTournament/players' => 'parse_tournament#players'
+  post 'parseTournament/players' => 'parse_tournament#players'
+
   resources :tournaments
 
   get 'gamesets/new'
@@ -17,7 +23,7 @@ Rails.application.routes.draw do
   get 'help'    => 'static_pages#help'
   get 'about'   => 'static_pages#about'
   get 'contact' => 'static_pages#contact'
-  get 'parseTournament' => 'static_pages#parseTournament'
+  #get 'parseTournament' => 'static_pages#parseTournament'
   get 'createTournament' => 'static_pages#createTournament'
   get 'signup'  => 'users#new'
 

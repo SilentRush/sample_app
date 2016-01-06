@@ -1,0 +1,46 @@
+<div class="jumbotron">
+  <% flash.each do |key, value| %>
+    <%= content_tag :div, value, class: "flash #{key}" %>
+  <% end %>
+  <h1>Players</h1>
+  <div><%= puts request.body.read %></div>
+  <div id="players">
+    <% if !@players.nil? %>
+      <%= form_tag("/tournaments", method: "post") do %>
+          <div class=".form-group">
+            <%= label_tag(:url, "Tournament URL") %>
+            <%= text_field_tag(:url, nil, class: "form-control", value: params[:url], readonly: true) %>
+            <input name="pcount" type="hidden" value="<%= @players.size %>">
+
+          <% c = 0 %>
+          <% (@players.size.to_f / 3).ceil.times do |i| %>
+            <div class="row">
+            <div class="col-md-4">
+              <% if !@players[c].nil? %>
+                <%= label_tag(:player, "Player #{c + 1} (#{@players[c]})") %>
+                <input type="text" name="Player<%= (c) %>" id="Player<%= c %>" value="<%= @players[c] %>" class="form-control">
+              <% end %>
+            </div>
+            <div class="col-md-4">
+              <% if !@players[c + 1].nil? %>
+                <%= label_tag(:player, "Player #{c + 2} (#{@players[c + 1]})") %>
+                <input type="text" name="Player<%= c + 1 %>" id="Player<%= c + 1 %>" value="<%= @players[c + 1] %>" class="form-control">
+              <% end %>
+            </div>
+            <div class="col-md-4">
+              <% if !@players[c + 2].nil? %>
+                <%= label_tag(:player, "Player #{c + 3} (#{@players[c + 2]})") %>
+                <input type="text" name="Player<%= c + 2 %>" id="Player<%= c + 2 %>" value="<%= @players[c + 2] %>" class="form-control">
+              <% end %>
+            </div>
+          </div>
+          <% c += 3 %>
+          <% end %>
+
+
+        </div>
+        <%= submit_tag("Create", class: "btn btn-sm btn-primary", name: "method") %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

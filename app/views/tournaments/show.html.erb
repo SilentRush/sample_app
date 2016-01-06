@@ -17,15 +17,42 @@
         </tr>
       </thead>
       <tbody>
-      <% @tournament.gamesets.each do |set| %>
+      <% @tournament.gamesets.each_with_index do |set, index| %>
 
-        <tr>
+        <tr class="clickable-row" data-id="row<%= index %>">
           <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
             <td><%= set.winner.gamertag.to_s %></td>
             <td><%= set.loser.gamertag.to_s %></td>
             <td><%= set.wscore %> - <%= set.lscore %></td>
-            <td><%= set.gamematches.first.wchar %></td>
-            <td><%= set.gamematches.first.lchar %></td>
+            <td><%= set.gamematches.first.wchar.to_s %></td>
+            <td><%= set.gamematches.first.lchar.to_s %></td>
+        </tr>
+
+        <tr id="row<%= index %>" hidden>
+          <td colspan="6">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Match #</th>
+                  <th>Winner</th>
+                  <th>Winning Character</th>
+                  <th>Loser</th>
+                  <th>Losing Character</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% set.gamematches.each do |match| %>
+                  <tr>
+                    <td><%= match.matchnum %></td>
+                    <td><%= match.winner.gamertag.to_s %></td>
+                    <td><%= match.loser.gamertag.to_s %></td>
+                    <td><%= match.wchar.to_s %></td>
+                    <td><%= match.lchar.to_s %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </td>
         </tr>
 
       <% end %>
@@ -60,7 +87,7 @@
                end %>
         <td><%= @wins %> - <%= @loses %></td>
         <td>
-            <%= number_to_percentage((@wins.to_f / (@loses + @wins)) * 100, precision: 2) %>
+            <%= @wins == 0 ? number_to_percentage(0 * 100, precision: 2) : number_to_percentage((@wins.to_f / (@loses + @wins)) * 100, precision: 2) %>
              </td>
     </tr>
   <% end %>

@@ -10,6 +10,7 @@ class CreateGamematches < ActiveRecord::Migration
       t.integer :lstock
       t.boolean :invalidMatch
       t.references :gameset, index: true, foreign_key: true
+      t.references :tournament, index: true, foreign_key: true
 
       t.timestamps null: false
     end
