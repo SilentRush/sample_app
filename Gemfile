@@ -6,8 +6,8 @@ gem 'rails', '4.2.4'
 gem 'bcrypt', '3.1.7'
 gem 'bootstrap-sass', '3.2.0.0'
 gem 'nokogiri'
-gem 'httparty'
 gem 'pry'
+gem 'httparty'
 gem 'jquery-turbolinks'
 # Use sqlite3 as the database for Active Record
 # Use SCSS for stylesheets
