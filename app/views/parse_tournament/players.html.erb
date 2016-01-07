@@ -1,4 +1,3 @@
-<div class="jumbotron">
   <% flash.each do |key, value| %>
     <%= content_tag :div, value, class: "flash #{key}" %>
   <% end %>
@@ -42,5 +41,3 @@
         <%= submit_tag("Create", class: "btn btn-sm btn-primary", name: "method") %>
       <% end %>
     <% end %>
-  </div>
-</div>

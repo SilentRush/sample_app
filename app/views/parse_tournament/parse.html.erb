@@ -1,4 +1,4 @@
-<div class="jumbotron">
+
   <% flash.each do |key, value| %>
     <%= content_tag :div, value, class: "flash #{key}" %>
   <% end %>
@@ -13,4 +13,3 @@
         <%= submit_tag("Get Players", class: "btn btn-sm btn-primary", name: "method") %>
     <% end %>
   </div>
-</div>
