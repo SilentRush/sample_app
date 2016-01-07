@@ -38,8 +38,8 @@
                     <td><%= set.loser.gamertag.to_s %></td>
                     <td><%= set.wscore %> - <%= set.lscore %></td>
                     <%
-                     wchar = Gamematch.select("wchar").where(tournament: @tournament, winner: set.winner, gameset: set)
-                     lchar = Gamematch.select("lchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+                     wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+                     lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
                      winningChars = []
                      losingChars = []
                      wchar.each do |match|
