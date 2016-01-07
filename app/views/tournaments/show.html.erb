@@ -41,16 +41,21 @@
                      wchar = Gamematch.select("wchar").where(tournament: @tournament, winner: set.winner, gameset: set)
                      lchar = Gamematch.select("lchar").where(tournament: @tournament, loser: set.loser, gameset: set)
                      winningChars = []
+                     losingChars = []
                      wchar.each do |match|
                        match.wchar.split(',').each do |char|
                         winningChars.push(char) if !winningChars.include? char
                        end
+                       match.lchar.split(',').each do |char|
+                         losingChars.push(char) if !losingChars.include? char
+                       end
                      end
-
-                     losingChars = []
                      lchar.each do |match|
                        match.lchar.split(',').each do |char|
                         losingChars.push(char) if !losingChars.include? char
+                       end
+                       match.wchar.split(',').each do |char|
+                        winningChars.push(char) if !winningChars.include? char
                        end
                      end
                      %>
