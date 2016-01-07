@@ -68,7 +68,7 @@
         <div class="form-group">
           <label for="winer">Winning Character:</label>
           <select class="form-control" id="wchar<%= match %>" name="wchar<%= match %>">
-            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].wchar : ""}") %>
+            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].wchar.split(',').first : ""}") %>
           </select>
         </div>
       </div>
@@ -76,7 +76,7 @@
         <div class="form-group">
           <label for="winer">Losing Character:</label>
           <select class="form-control" id="lchar<%= match %>" name="lchar<%= match %>">
-            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].lchar : ""}") %>
+            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].lchar.split(',').first : ""}") %>
           </select>
         </div>
       </div>
