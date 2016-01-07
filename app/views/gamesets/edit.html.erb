@@ -1,0 +1,53 @@
+<div class="jumbotron">
+  <div class="container">
+  <h1>Editing Set:</h1>
+  <h2><%= @set.tournament.name %></h2>
+
+<%= form_for :gameset, url: gameset_path(@set), method: :patch do |f| %>
+
+  <% if @set.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@set.errors.count, "error") %> prohibited
+        this set from being saved:
+      </h2>
+      <ul>
+        <% @set.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="row">
+    <h3>Set Information:</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+        <%= f.label "Winner:" %>
+        <%= f.text_field :winner, class: "form-control", name: "winner", value: @set.winner.gamertag %>
+    </div>
+    <div class="col-md-6">
+        <%= f.label "Loser:" %>
+        <%= f.text_field :loser, class: "form-control", name: "loser", value: @set.loser.gamertag %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <%= f.label "Winning Score:" %>
+      <%= f.text_field :wscore, class: "form-control", name: "wscore", value: @set.wscore %>
+    </div>
+    <div class="col-md-6">
+      <%= f.label "Losing Score:" %>
+      <%= f.text_field :lscore, class: "form-control", name: "lscore", value: @set.lscore %>
+    </div>
+  </div>
+
+    <%= f.submit class: "btn btn-sm btn-primary" %>
+
+<% end %>
+
+<%= link_to 'Back', gamesets_path %>
+</div>
+</div>

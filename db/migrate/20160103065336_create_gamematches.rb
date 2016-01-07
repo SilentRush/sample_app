@@ -8,6 +8,7 @@ class CreateGamematches < ActiveRecord::Migration
       t.string :loser_id
       t.integer :wstock
       t.integer :lstock
+      t.string :map
       t.boolean :invalidMatch
       t.references :gameset, index: true, foreign_key: true
       t.references :tournament, index: true, foreign_key: true

@@ -6,14 +6,11 @@ Rails.application.routes.draw do
   post 'parseTournament/players' => 'parse_tournament#players'
 
   resources :tournaments
+  resources :gamesets
+  resources :gamematchs
 
-  get 'gamesets/new'
-
-  get 'gamesets/create'
-
-  get 'gamematchs/new'
-
-  get 'gamematchs/create'
+  get 'batchMatch' => 'gamematchs#batchMatch'
+  post 'batchMatch' => 'gamesets#batchMatch'
 
   get 'players/new'
 

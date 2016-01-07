@@ -100,15 +100,15 @@ def createTournament page
         if((wscore.to_i + lscore.to_i).to_i > 0)
           (wscore.to_i + lscore.to_i).times do |i|
             if(i < wscore)
-              currMatch = Gamematch.create(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, invalidMatch: false, tournament_id: @tournament.id)
+              currMatch = Gamematch.create(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
               currMatch.save
             else
-              currMatch = Gamematch.create(matchnum: i + 1, winner: loser, wchar: wchars.join(","), loser: winner, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, invalidMatch: false, tournament_id: @tournament.id)
+              currMatch = Gamematch.create(matchnum: i + 1, winner: loser, wchar: lchars.join(","), loser: winner, lchar: wchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
               currMatch.save
             end
           end
         else
-          currMatch = Gamematch.create(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, invalidMatch: true, tournament_id: @tournament.id)
+          currMatch = Gamematch.create(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: true, tournament_id: @tournament.id)
           currMatch.save
         end
 

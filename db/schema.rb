@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20160105032841) do
     t.string   "loser_id"
     t.integer  "wstock"
     t.integer  "lstock"
+    t.string   "map"
     t.boolean  "invalidMatch"
     t.integer  "gameset_id"
     t.integer  "tournament_id"

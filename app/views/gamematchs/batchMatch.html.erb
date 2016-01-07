@@ -1,0 +1,106 @@
+<div class="jumbotron">
+  <div class="container">
+  <h1>Editing Set:</h1>
+  <h2><%= @set.tournament.name %></h2>
+
+<%= form_for :gameset, url: batchMatch_path(id: @set.id), method: :post do |f| %>
+
+  <% if @set.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@set.errors.count, "error") %> prohibited
+        this set from being saved:
+      </h2>
+      <ul>
+        <% @set.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% (@set.wscore + @set.lscore).times do |match| %>
+    <div class="row">
+      <h3>Match: <%= match + 1 %></h3>
+    </div>
+    <div class="row">
+      <%
+        winner = @set.winner.gamertag
+        loser = @set.loser.gamertag
+      %>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="winer">Winner:</label>
+          <select class="form-control" id="winner<%= match %>" name="winner<%= match %>">
+            <%= options_for_select([ "#{winner}", "#{loser}" ], "#{!@set.gamematches[match].nil? ? @set.gamematches[match].winner.gamertag : ""}") %>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="loser">Loser:</label>
+          <select class="form-control" id="loser<%= match %>" name="loser<%= match %>">
+            <%= options_for_select([ "#{winner}", "#{loser}" ], "#{!@set.gamematches[match].nil? ? @set.gamematches[match].loser.gamertag : ""}") %>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="map">Map:</label>
+          <select class="form-control" id="map<%= match %>" name="map<%= match %>">
+            <option value="Battlefield" selected="<%= !@set.gamematches[match].nil? ? ("selected" if @set.gamematches[match].map.eql? "Battlefield") : "" %>">Battlefield</option>
+            <option value="Yoshi Story" selected="<%= !@set.gamematches[match].nil? ? ("selected" if @set.gamematches[match].map.eql? "Yoshi Story") : "" %>">Yoshi's Story</option>
+            <option value="Dreamland" selected="<%= !@set.gamematches[match].nil? ? ("selected" if @set.gamematches[match].map.eql? "Dreamland") : "" %>">Dreamland</option>
+            <option value="Final Destination" selected="<%= !@set.gamematches[match].nil? ? ("selected" if @set.gamematches[match].map.eql? "Final Destination") : "" %>">Final Destination</option>
+            <option value="Pokemon Stadium" selected="<%= !@set.gamematches[match].nil? ? ("selected" if @set.gamematches[match].map.eql? "Pokemon Stadium") : "" %>">Pokemon Stadium</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%
+        chars = ["Bowser","Captain Falcon","Dk","Dr. Mario","Falco","Fox",
+                "Ganondorf","Ice Climbers","Jiggly Puff","Kirby","Link","Luigi",
+                "Mario","Marth","Mewtwo","Mr. Game & Watch","Ness","Peach",
+                "Pichu","Pikachu","Roy","Samus","Sheik","Yoshi",
+                "Young Link", "Zelda"]
+        %>
+        <div class="form-group">
+          <label for="winer">Winning Character:</label>
+          <select class="form-control" id="wchar<%= match %>" name="wchar<%= match %>">
+            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].wchar : ""}") %>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="winer">Losing Character:</label>
+          <select class="form-control" id="lchar<%= match %>" name="lchar<%= match %>">
+            <%= options_for_select(chars, "#{!@set.gamematches[match].nil? ? @set.gamematches[match].lchar : ""}") %>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <%= f.label "Winner Stocks Remaining:" %>
+        <%= f.text_field :wstock, class: "form-control", name: "wstock#{match}", value: !@set.gamematches[match].nil? ? @set.gamematches[match].wstock : ""  %>
+      </div>
+      <div class="col-md-6">
+        <%= f.label "Loser Stocks Remaining:" %>
+        <%= f.text_field :lstock, class: "form-control", name: "lstock#{match}", value: !@set.gamematches[match].nil? ? @set.gamematches[match].lstock : "" %>
+      </div>
+    </div>
+  <% end %>
+
+
+    <%= f.submit class: "btn btn-sm btn-primary" %>
+
+<% end %>
+
+<%= link_to 'Back', gamesets_path %>
+</div>
+</div>

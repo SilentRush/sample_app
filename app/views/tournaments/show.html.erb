@@ -5,95 +5,191 @@
   <h1><%= @tournament.name %></h1>
     <h2><%= @tournament.description %></h2>
 
-    <table class="table main">
-      <thead>
-        <tr>
-          <th>Round</th>
-          <th>Winner</th>
-          <th>loser</th>
-          <th>Score</th>
-          <th>Winner Characters</th>
-          <th>Loser Character</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @tournament.gamesets.each_with_index do |set, index| %>
+<div class="tabs">
+    <ul class="tab-links">
+        <li class="active"><a href="#bracket">Bracket</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#players">Players</a></li>
+    </ul>
 
-        <tr class="clickable-row <%= ((index + 1) % 2) == 0 ? "even" : "odd" %>" data-id="row<%= index %>">
-          <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
-            <td><%= set.winner.gamertag.to_s %></td>
-            <td><%= set.loser.gamertag.to_s %></td>
-            <td><%= set.wscore %> - <%= set.lscore %></td>
-            <td><%= set.gamematches.first.wchar.to_s %></td>
-            <td><%= set.gamematches.first.lchar.to_s %></td>
-        </tr>
+      <div class="tab-content">
+        <div id="bracket" class="tab active">
+        </div>
 
-        <tr id="row<%= index %>" hidden>
-          <td colspan="6">
-            <table class="table inner">
-              <thead>
+        <div id="results" class="tab">
+          <table class="table main">
+            <thead>
+              <tr>
+                <th>Round</th>
+                <th>Winner</th>
+                <th>Loser</th>
+                <th>Score</th>
+                <th>Winner Characters</th>
+                <th>Loser Character</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% @tournament.gamesets.each_with_index do |set, index| %>
+
+              <tr class="clickable-row <%= ((index + 1) % 2) == 0 ? "even" : "odd" %>" data-id="row<%= index %>">
+                  <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
+                  <td><%= set.winner.gamertag.to_s %></td>
+                  <td><%= set.loser.gamertag.to_s %></td>
+                  <td><%= set.wscore %> - <%= set.lscore %></td>
+                  <%
+                   wchar = Gamematch.select("wchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+                   lchar = Gamematch.select("lchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+                   winningChars = []
+                   wchar.each do |match|
+                     match.wchar.split(',').each do |char|
+                      winningChars.push(char) if !winningChars.include? char
+                     end
+                   end
+
+                   losingChars = []
+                   lchar.each do |match|
+                     match.lchar.split(',').each do |char|
+                      losingChars.push(char) if !losingChars.include? char
+                     end
+                   end
+                   %>
+                  <td>
+                    <% winningChars.each do |char| %>
+                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% losingChars.each do |char| %>
+                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link_to 'Edit', edit_gameset_path(set), class: "btn btn-sm btn-primary" %>
+                  </td>
+
+              </tr>
+
+              <tr id="row<%= index %>" hidden>
+                <td colspan="7">
+                  <table class="table inner">
+                    <thead>
+                      <tr>
+                        <th>Match #</th>
+                        <th>Winner</th>
+                        <th>Loser</th>
+                        <th>Winning Character</th>
+                        <th>Losing Character</th>
+                        <th>Map</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% set.gamematches.each do |match| %>
+                        <tr>
+                          <td><%= match.matchnum %></td>
+                          <td><%= match.winner.gamertag.to_s %></td>
+                          <td><%= match.loser.gamertag.to_s %></td>
+                          <%
+                           winningChars = []
+                           match.wchar.split(',').each do |char|
+                            winningChars.push(char) if !winningChars.include? char
+                           end
+
+                           losingChars = []
+                           match.lchar.split(',').each do |char|
+                            losingChars.push(char) if !losingChars.include? char
+                           end
+                           %>
+                          <td>
+                            <% winningChars.each do |char| %>
+                            <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") if !char.empty? %>
+                            <% end %>
+                          </td>
+                          <td>
+                            <% losingChars.each do |char| %>
+                            <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") if !char.empty? %>
+                            <% end %>
+                          </td>
+                          <% puts match.map.class %>
+                          <td><%= image_tag("maps/#{match.map}.png", alt: "#{match.map.humanize}", class: "charImg") if !match.map.empty? %></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+
+            <% end %>
+          </tbody>
+          </table>
+        </div>
+
+         <div id="players" class="tab">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Gamertag</th>
+                <th>Winning Characters</th>
+                <th>Losing Characters</th>
+                <th>W/L</th>
+                <th>Winrate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @tournament.players.each do |player| %>
                 <tr>
-                  <th>Match #</th>
-                  <th>Winner</th>
-                  <th>Winning Character</th>
-                  <th>Loser</th>
-                  <th>Losing Character</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% set.gamematches.each do |match| %>
-                  <tr>
-                    <td><%= match.matchnum %></td>
-                    <td><%= match.winner.gamertag.to_s %></td>
-                    <td><%= match.loser.gamertag.to_s %></td>
-                    <td><%= match.wchar.to_s %></td>
-                    <td><%= match.lchar.to_s %></td>
-                  </tr>
+                  <td><%= player.gamertag %></td>
+
+                  <%
+                   wchar = Gamematch.select("wchar").where(tournament: @tournament, winner: player)
+                   lchar = Gamematch.select("lchar").where(tournament: @tournament, loser: player)
+                   winningChars = []
+                   wchar.each do |match|
+                     match.wchar.split(',').each do |char|
+                      winningChars.push(char) if !winningChars.include? char
+                     end
+                   end
+
+                   losingChars = []
+                   lchar.each do |match|
+                     match.lchar.split(',').each do |char|
+                      losingChars.push(char) if !losingChars.include? char
+                     end
+                   end
+                   %>
+                  <td>
+                    <% winningChars.each do |char| %>
+                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% losingChars.each do |char| %>
+                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+                    <% end %>
+                  </td>
+                    <% @wins = 0
+                           @loses = 0
+                          player.gamesets.where(tournament_id: @tournament.id).each do |set|
+                            if player == set.winner
+                              puts @wins.to_s + set.winner.gamertag.to_s
+                              @wins += set.wscore.to_i
+                              @loses += set.lscore
+                            else
+                              @wins += set.lscore
+                              @loses += set.wscore
+                            end
+                           end %>
+                  <td><%= @wins %> - <%= @loses %></td>
+                  <td>
+                      <%= @wins == 0 ? number_to_percentage(0 * 100, precision: 2) : number_to_percentage((@wins.to_f / (@loses + @wins)) * 100, precision: 2) %>
+                  </td>
+                 </tr>
                 <% end %>
               </tbody>
             </table>
-          </td>
-        </tr>
-
-      <% end %>
-    </tbody>
-  </table>
-
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Gamertag</th>
-        <th>Characters</th>
-        <th>W/L</th>
-        <th>Winrate</th>
-      </tr>
-    </thead>
-    <tbody>
-  <% @tournament.players.each do |player| %>
-    <tr>
-        <td><%= player.gamertag %></td>
-        <td><%= player.characters %></td>
-        <% @wins = 0
-               @loses = 0
-              player.gamesets.where(tournament_id: @tournament.id).each do |set|
-                if player == set.winner
-                  puts @wins.to_s + set.winner.gamertag.to_s
-                  @wins += set.wscore.to_i
-                  @loses += set.lscore
-                else
-                  @wins += set.lscore
-                  @loses += set.wscore
-                end
-               end %>
-        <td><%= @wins %> - <%= @loses %></td>
-        <td>
-            <%= @wins == 0 ? number_to_percentage(0 * 100, precision: 2) : number_to_percentage((@wins.to_f / (@loses + @wins)) * 100, precision: 2) %>
-             </td>
-    </tr>
-  <% end %>
-</tbody>
-</table>
-</div>
+        </div>
+      </div>
+  </div>
 
 
 
@@ -101,3 +197,4 @@
             'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos' %>
 <%= link_to image_tag("http://drafterita.com/data/uploads/twitch-big-logo.png", alt: "SilentRush Twitch"),
             'http://www.twitch.tv/silentrush_' %>
+</div>
