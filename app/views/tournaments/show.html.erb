@@ -14,212 +14,507 @@
   <div class="tab-content">
     <div id="bracket" class="tab active">
       <div class="bracket-container">
-        <table class="bracket-winners">
-          <thead>
-            <% @tournament.winnersRounds.times do |i| %>
-              <th>Winners Round <%= i %></th>
-            <% end %>
-          </thead>
-          <tbody>
-              <% @tournament.winnersRounds.times do |i| %>
-              <td>
-                <% @tournament.gamesets.where(name: "winners_round_#{i + 1}").each_with_index do |set, index| %>
-                  <%
-                      topIsWinner = false
-                      botIsWinner = false
-                      set.winner == set.topPlayer ? topIsWinner = true : botIsWinner = true
-                   %>
-
-                  <%
-                    wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
-                    lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
-                    winningChars = []
-                    losingChars = []
-                    wchar.each do |match|
-                      match.wchar.split(',').each do |char|
-                       winningChars.push(char) if !winningChars.include? char
-                      end
-                      match.lchar.split(',').each do |char|
-                        losingChars.push(char) if !losingChars.include? char
-                      end
-                    end
-                    lchar.each do |match|
-                      match.lchar.split(',').each do |char|
-                       losingChars.push(char) if !losingChars.include? char
-                      end
-                      match.wchar.split(',').each do |char|
-                       winningChars.push(char) if !winningChars.include? char
-                      end
-                    end
-                  %>
-                  <% if index % 2 == 0 %>
-
-                  <% #Place spacers between sets
-                    i.times do |x|
-                      break if (x + 2) == @tournament.winnersRounds
-                  %>
-                    <div class="match_spacer" style="width: 52px;">&nbsp;</div>
-                  <% end %>
-
-                    <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
-                      <tbody>
-                        <tr>
-                          <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
-                            <div class="match_top_half">
-                              <div class="top_seed"></div>
-                              <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
-                              <div class="inner_content" data-round="1">
-                                <% if topIsWinner %>
-                                  <% winningChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% else %>
-                                  <% losingChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% end %>
-                                <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
-                              </div>
-                            </div>
-                            <div class="match_bottom_half">
-                              <div class="bottom_seed">33</div>
-                              <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
-                              <div class="inner_content" data-participant_id="34398092" data-round="1">
-                                <% if botIsWinner %>
-                                  <% winningChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% else %>
-                                  <% losingChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% end %>
-                                <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
-                              </div>
-                            </div>
-                            <div class="shadow"></div>
-                          </td>
-                          <td style="padding:0;">
-                            <div class="match-location-container">
-                            <div class="hide match-location" title="">
-
-                            </div>
-                            </div>
-                            <div class="bracket_lines " style="float:none;">
-                              <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
-                                <tbody>
-                                  <tr>
-                                    <td class="left_col top_row border_bottom rfix">&nbsp;</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="left_col bottom_row border_right">&nbsp;</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  <% else %>
-
-                  <% #Place spacers between sets
-                    i.times do |x|
-                  %>
-                    <table border="0" cellpadding="0" cellspacing="0" class="match_table  " id="">
-                      <tbody>
-                        <tr>
-                          <td class="core" id="" style="padding:0">
-                            <div class="spacer full_width_spacer">&nbsp;</div>
-                          </td>
-                          <td style="padding:0;">
-                            <div class="bracket_lines " style="float:none;"><table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td rowspan="2" class="left_col one_row border_right">&nbsp;</td><td class="right_col top_row border_bottom">&nbsp;</td></tr><tr><td class="bottom_row">&nbsp;</td></tr></tbody></table></div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  <% end %>
-
-
-
-
-                    <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
-                      <tbody>
-                        <tr>
-                          <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
-                            <div class="match_top_half">
-                              <div class="top_seed"></div>
-                              <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
-                              <div class="inner_content" data-round="1">
-                                <% if topIsWinner %>
-                                  <% winningChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% else %>
-                                  <% losingChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% end %>
-                                <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
-                              </div>
-                            </div>
-                            <div class="match_bottom_half">
-                              <div class="bottom_seed">33</div>
-                              <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
-                              <div class="inner_content" data-participant_id="34398092" data-round="1">
-                                <% if botIsWinner %>
-                                  <% winningChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% else %>
-                                  <% losingChars.each do |char| %>
-                                  <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
-                                  <% end %>
-                                <% end %>
-                                <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
-                              </div>
-                            </div>
-                            <div class="shadow"></div>
-                          </td>
-                          <td style="padding:0;">
-                            <div class="match-location-container">
-                            <div class="hide match-location" title="">
-
-                            </div>
-                            </div>
-                            <div class="bracket_lines " style="float:none;">
-                              <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
-                                <tbody>
-                                  <tr>
-                                    <td class="left_col top_row border_bottom border_right lfix">&nbsp;</td>
-                                    <td class="right_col top_row border_top">&nbsp;</td>
-                                  </tr>
-                                  <tr>
-                                    <td class="left_col rfix"></td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  <% end %>
-                <% end %>
-                </td>
-              <% end %>
-          </tbody>
-        </table>
-          <table class="bracket-losers">
+        <div class="winners-container">
+          <table class="bracket-winners">
             <thead>
-              <th>Round 1</th>
+              <% @tournament.winnersRounds.times do |i| %>
+                <th>Winners Round <%= i + 1 %></th>
+              <% end %>
             </thead>
             <tbody>
-              <td>
+                <%
+                  @tournament.winnersRounds.times do |i|
+                  firstTime = true
+                %>
+                <td>
+                  <% @tournament.gamesets.where(name: "winners_round_#{i + 1}").each_with_index do |set, index| %>
+                    <%
+                        topIsWinner = false
+                        botIsWinner = false
+                        set.winner == set.topPlayer ? topIsWinner = true : botIsWinner = true
+                     %>
 
-              </td>
+                    <%
+                      wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+                      lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+                      winningChars = []
+                      losingChars = []
+                      wchar.each do |match|
+                        match.wchar.split(',').each do |char|
+                         winningChars.push(char) if !winningChars.include? char
+                        end
+                        match.lchar.split(',').each do |char|
+                          losingChars.push(char) if !losingChars.include? char
+                        end
+                      end
+                      lchar.each do |match|
+                        match.lchar.split(',').each do |char|
+                         losingChars.push(char) if !losingChars.include? char
+                        end
+                        match.wchar.split(',').each do |char|
+                         winningChars.push(char) if !winningChars.include? char
+                        end
+                      end
+                    %>
+                    <% if index % 2 == 0 %>
+
+                    <% if i != 0 %>
+                      <% #Place spacers between sets
+                        (i == 1 ? (i) : ((2 ** i) - 1)).times do |x|
+                      %>
+                        <% if firstTime %>
+                          <div class="match_half_spacer" style="width: 50px;"></div>
+                        <% else %>
+                          <div class="match_spacer" style="width: 50px;"></div>
+                        <% end %>
+                      <% end %>
+                      <% firstTime = false %>
+                    <% end %>
+
+                      <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
+                        <tbody>
+                          <tr>
+                            <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
+                              <div class="match_top_half">
+                                <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-round="1">
+                                  <% if topIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="match_bottom_half">
+                                <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-participant_id="34398092" data-round="1">
+                                  <% if botIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="shadow"></div>
+                            </td>
+                            <td style="padding:0;">
+                              <div class="match-location-container">
+                              <div class="hide match-location" title="">
+
+                              </div>
+                              </div>
+                              <div class="bracket_lines " style="float:none;">
+                                <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td class="left_col top_row border_bottom rfix"></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="left_col bottom_row border_right"></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    <% else %>
+
+                    <% if i != 0 %>
+                      <% #Place spacers between sets
+                        (i == 1 ? (i) : ((2 ** i) - 1)).times do |x|
+                      %>
+                          <table border="0" cellpadding="0" cellspacing="0" class="match_table  " id="">
+                            <tbody>
+                              <tr>
+                                <td class="core" id="" style="padding:0">
+                                  <div class="spacer full_width_spacer"></div>
+                                </td>
+                                <% if (x + 1) == ((1 + ((2 ** i) - 1))/2) || i == 1 %>
+                                  <td style="padding:0;">
+                                    <div class="bracket_lines " style="float:none;">
+                                      <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                          <tr>
+                                            <td rowspan="2" class="left_col one_row border_right"></td>
+                                            <td class="right_col top_row border_bottom"></td>
+                                          </tr>
+                                          <tr>
+                                            <td class="bottom_row"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </td>
+                                <% else %>
+                                  <td style="padding:0;">
+                                    <div class="bracket_lines " style="float:none;"><table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="left_col one_row border_right"></td></tr></tbody></table></div>
+                                  </td>
+                                <% end %>
+                              </tr>
+                            </tbody>
+                          </table>
+                      <% end %>
+                    <% end %>
+
+
+
+
+                      <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
+                        <tbody>
+                          <tr>
+                            <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
+                              <div class="match_top_half">
+                                <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-round="1">
+                                  <% if topIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="match_bottom_half">
+                                <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-participant_id="34398092" data-round="1">
+                                  <% if botIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="shadow"></div>
+                            </td>
+
+                            <% if i == 0 %>
+                              <td style="padding:0;">
+                                <div class="match-location-container">
+                                <div class="hide match-location" title="">
+
+                                </div>
+                                </div>
+                                <div class="bracket_lines " style="float:none;">
+                                  <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                      <tr>
+                                        <td class="left_col top_row border_bottom border_right lfix"></td>
+                                        <td class="right_col top_row border_top"></td>
+                                      </tr>
+                                      <tr>
+                                        <td class="left_col rfix"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            <% else %>
+
+                              <td style="padding:0;">
+                                <div class="match-location-container">
+                                <div class="hide match-location" title="">
+
+                                </div>
+                                </div>
+                                <div class="bracket_lines " style="float:none;">
+                                  <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                      <tr>
+                                        <td class="left_col top_row border_right border_bottom"></td>
+                                      </tr>
+                                      <tr>
+                                        <td class="right_col rfix"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            <% end %>
+
+                          </tr>
+                        </tbody>
+                      </table>
+                    <% end %>
+                  <% end %>
+                  </td>
+                  <% skipRound1 = false %>
+                  <% skipRound2 = false %>
+                <% end %>
             </tbody>
           </table>
+        </div>
+        <div class="losers-container">
+          <table class="bracket-losers">
+            <thead>
+              <% @tournament.losersRounds.times do |i| %>
+                <th>Losers Round <%= i + 1 %></th>
+              <% end %>
+            </thead>
+            <tbody>
+                <%
+                  counter = 0
+                  @tournament.losersRounds.times do |i|
+                  firstTime = true
+                %>
+                <td>
+                  <% @tournament.gamesets.where(name: "losers_round_#{i + 1}").each_with_index do |set, index| %>
+                    <%
+                        topIsWinner = false
+                        botIsWinner = false
+                        set.winner == set.topPlayer ? topIsWinner = true : botIsWinner = true
+                     %>
+
+                    <%
+                      wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+                      lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+                      winningChars = []
+                      losingChars = []
+                      wchar.each do |match|
+                        match.wchar.split(',').each do |char|
+                         winningChars.push(char) if !winningChars.include? char
+                        end
+                        match.lchar.split(',').each do |char|
+                          losingChars.push(char) if !losingChars.include? char
+                        end
+                      end
+                      lchar.each do |match|
+                        match.lchar.split(',').each do |char|
+                         losingChars.push(char) if !losingChars.include? char
+                        end
+                        match.wchar.split(',').each do |char|
+                         winningChars.push(char) if !winningChars.include? char
+                        end
+                      end
+                    %>
+                    <% if index % 2 == 0 %>
+
+                    <% if i != 0 && i != 1
+                       %>
+                      <% #Place spacers between sets
+                      (counter == 1 ? (1) : ((2 ** counter) - 1)).times do |x|
+                      %>
+                        <% if firstTime %>
+                          <div class="match_half_spacer" style="width: 50px;"></div>
+                        <% else %>
+                          <div class="match_spacer" style="width: 50px;"></div>
+                        <% end %>
+                      <% end %>
+                      <% firstTime = false %>
+                    <% end %>
+
+                      <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
+                        <tbody>
+                          <tr>
+                            <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
+                              <div class="match_top_half">
+                                <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-round="1">
+                                  <% if topIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="match_bottom_half">
+                                <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-participant_id="34398092" data-round="1">
+                                  <% if botIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="shadow"></div>
+                            </td>
+                            <td style="padding:0;">
+                              <div class="match-location-container">
+                              <div class="hide match-location" title="">
+
+                              </div>
+                              </div>
+                              <div class="bracket_lines " style="float:none;">
+                                <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                  <tbody>
+                                    <tr>
+                                      <td class="left_col top_row border_bottom rfix"></td>
+                                    </tr>
+                                    <tr>
+                                      <td class="left_col bottom_row border_right"></td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    <% else %>
+
+                    <% if i != 0 && i != 1 %>
+                      <% #Place spacers between sets
+                      (counter == 1 ? (1) : ((2 ** counter) - 1)).times do |x|
+                      %>
+                          <table border="0" cellpadding="0" cellspacing="0" class="match_table  " id="">
+                            <tbody>
+                              <tr>
+                                <td class="core" id="" style="padding:0">
+                                  <div class="spacer full_width_spacer"></div>
+                                </td>
+                                <% if (x + 1) == ((1 + ((2 ** i) - 1))/2) || i == 1 %>
+                                  <td style="padding:0;">
+                                    <div class="bracket_lines " style="float:none;">
+                                      <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                        <tbody>
+                                          <tr>
+                                            <td rowspan="2" class="left_col one_row border_right"></td>
+                                            <td class="right_col top_row border_bottom"></td>
+                                          </tr>
+                                          <tr>
+                                            <td class="bottom_row"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </td>
+                                <% else %>
+                                  <td style="padding:0;">
+                                    <div class="bracket_lines " style="float:none;"><table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="left_col one_row border_right"></td></tr></tbody></table></div>
+                                  </td>
+                                <% end %>
+                              </tr>
+                            </tbody>
+                          </table>
+                      <% end %>
+                    <% end %>
+
+
+
+
+                      <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
+                        <tbody>
+                          <tr>
+                            <td class="core" id="match_qtip_51831678_" style="padding:0" original-title="">
+                              <div class="match_top_half">
+                                <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-round="1">
+                                  <% if topIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="match_bottom_half">
+                                <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
+                                <div class="inner_content" data-participant_id="34398092" data-round="1">
+                                  <% if botIsWinner %>
+                                    <% winningChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% else %>
+                                    <% losingChars.each do |char| %>
+                                    <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char.humanize}", class: "bracket-charImg") %>
+                                    <% end %>
+                                  <% end %>
+                                  <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                </div>
+                              </div>
+                              <div class="shadow"></div>
+                            </td>
+
+                            <% if i == 0 %>
+                              <td style="padding:0;">
+                                <div class="match-location-container">
+                                <div class="hide match-location" title="">
+
+                                </div>
+                                </div>
+                                <div class="bracket_lines " style="float:none;">
+                                  <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                      <tr>
+                                        <td class="left_col top_row border_bottom border_right lfix"></td>
+                                        <td class="right_col top_row border_top"></td>
+                                      </tr>
+                                      <tr>
+                                        <td class="left_col rfix"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            <% else %>
+
+                              <td style="padding:0;">
+                                <div class="match-location-container">
+                                <div class="hide match-location" title="">
+
+                                </div>
+                                </div>
+                                <div class="bracket_lines " style="float:none;">
+                                  <table class="bracket_lines_table" style="border-collapse:collapse;" cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                      <tr>
+                                        <td class="left_col top_row border_right border_bottom"></td>
+                                      </tr>
+                                      <tr>
+                                        <td class="right_col rfix"></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </td>
+                            <% end %>
+
+                          </tr>
+                        </tbody>
+                      </table>
+                    <% end %>
+                  <% end %>
+                  <% counter += 1 if (i + 1) % 2 == 0 %>
+                  </td>
+                <% end %>
+            </tbody>
+          </table>
+        </div>
         </div>
 
       </div>
