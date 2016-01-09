@@ -44,12 +44,14 @@ ActiveRecord::Schema.define(version: 20160105032841) do
     t.string   "name"
     t.string   "winner_id"
     t.string   "loser_id"
+    t.string   "topPlayer_id"
+    t.string   "bottomPlayer_id"
     t.integer  "setnum"
     t.integer  "wscore"
     t.integer  "lscore"
     t.integer  "tournament_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "gamesets", ["tournament_id"], name: "index_gamesets_on_tournament_id"
@@ -86,8 +88,10 @@ ActiveRecord::Schema.define(version: 20160105032841) do
     t.date     "date"
     t.string   "description"
     t.string   "url"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "winnersRounds"
+    t.integer  "losersRounds"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "users", force: :cascade do |t|

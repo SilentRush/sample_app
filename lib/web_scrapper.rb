@@ -29,7 +29,16 @@ def createTournament page
   @tournament.name = tname
   @tournament.description = tsuffix
   @tournament.url = page
+  @tournament.winnersRounds = 0
+  @tournament.losersRounds = 0
   #@tournament.date = tdate
+  @parse_page.css('.bracket-content').css('.bracket-section').css('.bracket-round-heading').each do |a|
+    if a.text.include?("Winners")
+      @tournament.winnersRounds += 1
+    elsif a.text.include?("Losers")
+      @tournament.losersRounds += 1
+    end
+  end
 
   @tournament.save
   params[:pcount].to_i.times do |i|
@@ -82,6 +91,18 @@ def createTournament page
         else
           loser = Player.find_by(gamertag: playerHash[match.css('.loser').css('.match-player-name').text])
         end
+
+        topPlayer = Player
+        bottomPlayer = Player
+        #find who is top player and who is bottom
+        tplayer = match.css('.match-player-name').first
+        bplayer = match.css('.match-player-name').last
+        topPlayer = winner if winner.gamertag.eql?(tplayer.text)
+        topPlayer = loser if loser.gamertag.eql?(tplayer.text)
+        bottomPlayer = winner if winner.gamertag.eql?(bplayer.text)
+        bottomPlayer = loser if loser.gamertag.eql?(bplayer.text)
+
+
         lchars = []
         img = match.css('.loser').css('.match-character').css('img')
         img.each do |link|
@@ -92,7 +113,7 @@ def createTournament page
         wscore = match.css('.winner').css('.match-player-stocks').text.to_i
         lscore = match.css('.loser').css('.match-player-stocks').text.to_i
 
-        currSet = Gameset.create(name: roundname, setnum: setNum, winner: winner, loser: loser, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
+        currSet = Gameset.create(name: roundname, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
         winner.gamesets << currSet
         loser.gamesets << currSet
         currSet.save

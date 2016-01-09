@@ -5,6 +5,8 @@ class CreateTournaments < ActiveRecord::Migration
       t.date :date
       t.string :description
       t.string :url
+      t.integer :winnersRounds
+      t.integer :losersRounds
 
       t.timestamps null: false
     end
