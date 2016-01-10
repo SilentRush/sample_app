@@ -83,16 +83,7 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <%= f.label "Winner Stocks Remaining:" %>
-        <%= f.text_field :wstock, class: "form-control", name: "wstock#{match}", value: !@set.gamematches[match].nil? ? @set.gamematches[match].wstock : ""  %>
-      </div>
-      <div class="col-md-6">
-        <%= f.label "Loser Stocks Remaining:" %>
-        <%= f.text_field :lstock, class: "form-control", name: "lstock#{match}", value: !@set.gamematches[match].nil? ? @set.gamematches[match].lstock : "" %>
-      </div>
-    </div>
+    <input type="hidden" name="setNum<%= match %>" value="<%= match + 1 %>" />
   <% end %>
 
 

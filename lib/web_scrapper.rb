@@ -35,6 +35,8 @@ def createTournament page
   @parse_page.css('.bracket-content').css('.bracket-section').css('.bracket-round-heading').each do |a|
     if a.text.include?("Winners")
       @tournament.winnersRounds += 1
+    elsif a.text.include?("Grand Finals")
+      @tournament.winnersRounds += 1
     elsif a.text.include?("Losers")
       @tournament.losersRounds += 1
     end
@@ -97,10 +99,10 @@ def createTournament page
         #find who is top player and who is bottom
         tplayer = match.css('.match-player-name').first
         bplayer = match.css('.match-player-name').last
-        topPlayer = winner if winner.gamertag.eql?(tplayer.text)
-        topPlayer = loser if loser.gamertag.eql?(tplayer.text)
-        bottomPlayer = winner if winner.gamertag.eql?(bplayer.text)
-        bottomPlayer = loser if loser.gamertag.eql?(bplayer.text)
+        topPlayer = winner if winner.gamertag.eql?(playerHash[tplayer.text])
+        topPlayer = loser if loser.gamertag.eql?(playerHash[tplayer.text])
+        bottomPlayer = winner if winner.gamertag.eql?(playerHash[bplayer.text])
+        bottomPlayer = loser if loser.gamertag.eql?(playerHash[bplayer.text])
 
 
         lchars = []
@@ -113,6 +115,10 @@ def createTournament page
         wscore = match.css('.winner').css('.match-player-stocks').text.to_i
         lscore = match.css('.loser').css('.match-player-stocks').text.to_i
 
+        puts "Top Player" + topPlayer.gamertag
+        puts "Bot Player" + bottomPlayer.gamertag
+        puts "Winner" + winner.gamertag
+        puts "Loser" + loser.gamertag
         currSet = Gameset.create(name: roundname, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
         winner.gamesets << currSet
         loser.gamesets << currSet
@@ -121,15 +127,15 @@ def createTournament page
         if((wscore.to_i + lscore.to_i).to_i > 0)
           (wscore.to_i + lscore.to_i).times do |i|
             if(i < wscore)
-              currMatch = Gamematch.create(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+              currMatch = Gamematch.create(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
               currMatch.save
             else
-              currMatch = Gamematch.create(matchnum: i + 1, winner: loser, wchar: lchars.join(","), loser: winner, lchar: wchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+              currMatch = Gamematch.create(matchnum: i + 1, winner: loser, wchar: lchars.join(","), loser: winner, lchar: wchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
               currMatch.save
             end
           end
         else
-          currMatch = Gamematch.create(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), wstock:"", lstock:"",gameset_id: currSet.id, map: "", invalidMatch: true, tournament_id: @tournament.id)
+          currMatch = Gamematch.create(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: true, tournament_id: @tournament.id)
           currMatch.save
         end
 

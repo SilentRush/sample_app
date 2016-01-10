@@ -30,14 +30,12 @@ class GamesetsController < ApplicationController
       if !@gameset.gamematches[match].nil?
         @gameset.gamematches[match].update(matchnum: match + 1, winner: params["winner#{match}"],
                                     wchar: params["wchar#{match}"], loser: params["loser#{match}"],
-                                    lchar: params["lchar#{match}"], wstock: params["wstock#{match}"],
-                                    lstock: params["lstock#{match}"], map: params["map#{match}"],
+                                    lchar: params["lchar#{match}"], map: params["map#{match}"],
                                     invalidMatch: false)
       else
         gamematch = Gamematch.create(matchnum: match + 1, winner: params["winner#{match}"],
                                     wchar: params["wchar#{match}"], loser: params["loser#{match}"],
-                                    lchar: params["lchar#{match}"], wstock: params["wstock#{match}"],
-                                    lstock: params["lstock#{match}"], map: params["map#{match}"],
+                                    lchar: params["lchar#{match}"], map: params["map#{match}"],
                                     invalidMatch: false)
         gamematch.gameset = @gameset
         gamematch.save

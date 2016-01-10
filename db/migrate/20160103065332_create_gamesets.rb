@@ -6,6 +6,7 @@ class CreateGamesets < ActiveRecord::Migration
       t.string :loser_id
       t.string :topPlayer_id
       t.string :bottomPlayer_id
+      t.string :url
       t.integer :setnum
       t.integer :wscore
       t.integer :lscore
