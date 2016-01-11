@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <%
-                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).floor)) / 2 ) / 2
+                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).ceil)) / 2 ) / 2
                   @tournament.winnersRounds.times do |i|
                   firstTime = true
                 %>
@@ -307,7 +307,7 @@
             </thead>
             <tbody>
                 <%
-                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).floor)) / 2 ) / 2
+                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).ceil)) / 2 ) / 2
                   @tournament.losersRounds.times do |i|
                   firstTime = true
                 %>
