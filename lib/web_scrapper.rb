@@ -86,7 +86,7 @@ def createTournament page
         if m.text.blank?
           #blankplayer = Player.create(gamertag: "blankmatchbye", name: "blankmatchbye", characters: "", wins: 0, loses: 0, winrate: 0)
           #blankplayer = Player.find(gamertag: "blankmatchbye") if !blankplayer.save
-          currSet = Gameset.create(roundNum: round, setnum: setNum, winner: nil, loser: nil, topPlayer: nil, bottomPlayer: nil, wscore: nil, lscore: nil, tournament_id: @tournament.id)
+          currSet = Gameset.create(roundnum: round, setnum: setNum, winner: nil, loser: nil, topPlayer: nil, bottomPlayer: nil, wscore: nil, lscore: nil, tournament_id: @tournament.id)
           currSet.save
         else
           match = m.css('.match-affix-wrapper')
@@ -139,7 +139,7 @@ def createTournament page
 
 
 
-          currSet = Gameset.create(roundNum: round, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
+          currSet = Gameset.create(roundnum: round, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
           winner.gamesets << currSet
           loser.gamesets << currSet
           currSet.save

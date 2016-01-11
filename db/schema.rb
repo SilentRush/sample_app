@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105032841) do
+ActiveRecord::Schema.define(version: 20160111074442) do
 
   create_table "gamematches", force: :cascade do |t|
     t.integer  "matchnum"
@@ -39,7 +39,6 @@ ActiveRecord::Schema.define(version: 20160105032841) do
   add_index "gamematches_players", ["player_id"], name: "index_gamematches_players_on_player_id"
 
   create_table "gamesets", force: :cascade do |t|
-    t.integer  "roundNum"
     t.string   "winner_id"
     t.string   "loser_id"
     t.string   "topPlayer_id"
@@ -51,6 +50,7 @@ ActiveRecord::Schema.define(version: 20160105032841) do
     t.integer  "tournament_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.integer  "roundnum"
   end
 
   add_index "gamesets", ["tournament_id"], name: "index_gamesets_on_tournament_id"

@@ -27,7 +27,7 @@
                   firstTime = true
                 %>
                 <td>
-                  <% sets = @tournament.gamesets.where("roundNum = ?", (i + 1))
+                  <% sets = @tournament.gamesets.where("roundnum = ?", (i + 1))
                     setSize = sets.size
                     sets.each_with_index do |set, index| %>
                     <%
@@ -103,7 +103,7 @@
                     <% else %>
                     <% ran = Random.new()
                         rannum = ran.rand(56347456) %>
-                    <div class="clickable-set" data-id="set<%= set.roundNum + index + rannum %>">
+                    <div class="clickable-set" data-id="set<%= set.roundnum + index + rannum %>">
                         <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
                           <tbody>
                             <tr>
@@ -228,7 +228,7 @@
                         </table>
                     </div>
 
-                    <div id="set<%=  set.roundNum + index + rannum %>" class="set-information">
+                    <div id="set<%=  set.roundnum + index + rannum %>" class="set-information">
                       <div class="set-table">
                           <div class="set-title">
                               <div class="set-player top">
@@ -313,7 +313,7 @@
                   firstTime = true
                 %>
                 <td>
-                  <% sets = @tournament.gamesets.where("roundNum = ?", -(i + 1))
+                  <% sets = @tournament.gamesets.where("roundnum = ?", -(i + 1))
                   setSize = sets.size
                   sets.each_with_index do |set, index| %>
                     <%
@@ -392,7 +392,7 @@
                     <% ran = Random.new()
                         rannum = ran.rand(734500530) %>
 
-                        <div class="clickable-set" data-id="set<%= set.roundNum + index + rannum %>">
+                        <div class="clickable-set" data-id="set<%= set.roundnum + index + rannum %>">
                             <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
                               <tbody>
                                 <tr>
@@ -517,7 +517,7 @@
                             </table>
                         </div>
 
-                    <div id="set<%= set.roundNum + index + rannum %>" class="set-information">
+                    <div id="set<%= set.roundnum + index + rannum %>" class="set-information">
                       <div class="set-table">
                           <div class="set-title">
                               <div class="set-player top">
