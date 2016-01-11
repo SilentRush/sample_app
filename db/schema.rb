@@ -39,11 +39,12 @@ ActiveRecord::Schema.define(version: 20160105032841) do
   add_index "gamematches_players", ["player_id"], name: "index_gamematches_players_on_player_id"
 
   create_table "gamesets", force: :cascade do |t|
-    t.string   "name"
+    t.integer  "roundNum"
     t.string   "winner_id"
     t.string   "loser_id"
     t.string   "topPlayer_id"
     t.string   "bottomPlayer_id"
+    t.string   "url"
     t.integer  "setnum"
     t.integer  "wscore"
     t.integer  "lscore"

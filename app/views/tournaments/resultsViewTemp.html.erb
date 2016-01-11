@@ -1,0 +1,122 @@
+
+<li><a href="#results">Results</a></li>
+
+
+<div id="results" class="tab">
+  <div class="table-responsive">
+    <table class="table main">
+      <thead>
+        <tr>
+          <th>Round</th>
+          <th>Winner</th>
+          <th>Loser</th>
+          <th>Score</th>
+          <th>Winner Characters</th>
+          <th>Loser Character</th>
+          <th>Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% @tournament.gamesets.each_with_index do |set, index| %>
+
+        <tr class="clickable-row <%= ((index + 1) % 2) == 0 ? "even" : "odd" %>" data-id="row<%= index %>">
+            <td><%= set.name.humanize.split.map(&:capitalize).join(' ') %></td>
+            <td><%= set.winner.gamertag.to_s %></td>
+            <td><%= set.loser.gamertag.to_s %></td>
+            <td><%= set.wscore %> - <%= set.lscore %></td>
+            <%
+             wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+             lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+             winningChars = []
+             losingChars = []
+             wchar.each do |match|
+               match.wchar.split(',').each do |char|
+                winningChars.push(char) if !winningChars.include? char
+               end
+               match.lchar.split(',').each do |char|
+                 losingChars.push(char) if !losingChars.include? char
+               end
+             end
+             lchar.each do |match|
+               match.lchar.split(',').each do |char|
+                losingChars.push(char) if !losingChars.include? char
+               end
+               match.wchar.split(',').each do |char|
+                winningChars.push(char) if !winningChars.include? char
+               end
+             end
+             %>
+            <td>
+              <% winningChars.each do |char| %>
+              <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+              <% end %>
+            </td>
+            <td>
+              <% losingChars.each do |char| %>
+              <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to 'Edit', edit_gameset_path(set), class: "btn btn-sm btn-primary" %>
+            </td>
+
+        </tr>
+
+        <tr id="row<%= index %>" hidden>
+          <td colspan="7">
+            <div class="table-responsive">
+              <table class="table inner">
+                <thead>
+                  <tr>
+                    <th>Match #</th>
+                    <th>Winner</th>
+                    <th>Loser</th>
+                    <th>Winning Character</th>
+                    <th>Losing Character</th>
+                    <th>Map</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% set.gamematches.each do |match| %>
+                    <tr>
+                      <td><%= match.matchnum %></td>
+                      <td><%= match.winner.gamertag.to_s %></td>
+                      <td><%= match.loser.gamertag.to_s %></td>
+                      <%
+                       winningChars = []
+                       match.wchar.split(',').each do |char|
+                        winningChars.push(char) if !winningChars.include? char
+                       end
+
+                       losingChars = []
+                       match.lchar.split(',').each do |char|
+                        losingChars.push(char) if !losingChars.include? char
+                       end
+                       %>
+                      <td>
+                        <% winningChars.each do |char| %>
+                        <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") if !char.empty? %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% losingChars.each do |char| %>
+                        <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") if !char.empty? %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% match.map.empty? ? map = "unknown" : map = match.map %>
+                        <span><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "charImg") if !map.empty? %></span>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+
+      <% end %>
+    </tbody>
+    </table>
+  </div>
+</div>

@@ -1,7 +1,7 @@
 class CreateGamesets < ActiveRecord::Migration
   def change
     create_table :gamesets do |t|
-      t.string :name
+      t.integer :roundNum
       t.string :winner_id
       t.string :loser_id
       t.string :topPlayer_id

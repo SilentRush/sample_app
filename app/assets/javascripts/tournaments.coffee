@@ -5,9 +5,13 @@
 $ ->
   $(".clickable-row").click ->
     $("[id=" + $(this).data("id") + "]").toggle();
-    
+
   $(".clickable-set").click ->
-    $("[id=" + $(this).data("id") + "]").toggle();
+    $('.set-information').removeClass("show");
+    $("[id=" + $(this).data("id") + "]").toggleClass("show");
+
+  $(".set-information-close").click ->
+    $('.set-information').removeClass("show");
 
   $('.tabs .tab-links a').on 'click', (event) ->
     currentAttrValue = $(this).attr('href');
