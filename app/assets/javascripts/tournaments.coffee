@@ -24,34 +24,7 @@ $ ->
     id = parent.find(".match-row").length + 1;
     div = parent.find(".set-match-container");
     html = "<div class=\"match-row\">
-              <div class=\"match-player Win\">
-                <span>" + div.find(".Win").first().text() + "</span>
-                <span class=\"set-character left\">
-                  <span class=\"currentChar\">
-                    <img alt=\"Peach\" class=\"currChar charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\">
-                  </span>
-                  <div class=\"char-list\">
-                    " + div.find(".char-list").first().html() + "
-                  </div>
-                </span>
-              </div>
-              <div class=\"match-map\">
-                <span class=\"currentMap\"><img alt=\"Unknown\" class=\"currMap charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
-                <div class=\"map-list\">
-                  " + div.find(".map-list").first().html() + "
-                </div>
-              </div>
-              <div class=\"match-player Lose\">
-                <span class=\"set-character right\">
-                  <div class=\"char-list\">
-                    " + div.find(".char-list").first().html() + "
-                  </div>
-                  <span class=\"currentChar\">
-                    <img alt=\"Fox\" class=\"currChar charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\">
-                  </span>
-                </span>
-                <span>" + div.find(".Lose").first().text() + "</span>
-              </div>
+              " + div.find(".match-row").html() + "
             </div>";
     div.append(html);
 
