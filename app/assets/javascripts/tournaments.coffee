@@ -33,12 +33,7 @@ $ ->
               <div class=\"match-map\">
                 <span class=\"currentMap\"><img alt=\"Unknown\" class=\"charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
                 <div class="map-list">
-                  " + <%= image_tag("maps/Battlefield.png", alt: "Battlefield", class: "selectedMap charImg") %>
-                  <%= image_tag("maps/Dreamland.png", alt: "Dreamland", class: "selectedMap charImg") %>
-                  <%= image_tag("maps/Final Destination.png", alt: "Final Destination", class: "selectedMap charImg") %>
-                  <%= image_tag("maps/Fountain of Dreams.png", alt: "Fountain of Dreams", class: "selectedMap charImg") %>
-                  <%= image_tag("maps/Pokemon Stadium.png", alt: "Pokemon Stadium", class: "selectedMap charImg") %>
-                  <%= image_tag("maps/Yoshi Story.png", alt: "Yoshi Story", class: "selectedMap charImg") %> + "
+                  " + div.find(".map-list").html() + "
                 </div>
               </div>
               <div class=\"match-player Lose\">
