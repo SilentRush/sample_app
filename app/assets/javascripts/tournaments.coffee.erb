@@ -55,3 +55,14 @@ $ ->
     image.attr("src", $(this).attr("src"));
     console.log($(parent).find(".map-list"));
     $(".map-list").hide();
+
+  $(".currentChar").click ->
+    $(this).parent().find(".char-list").show();
+
+  $(".selectedChar").click ->
+    parent = $(this).parent().parent();
+    image = $(parent).find(".currChar");
+    console.log(image);
+    image.attr("src", $(this).attr("src"));
+    console.log($(parent).find(".char-list"));
+    $(".char-list").hide();
