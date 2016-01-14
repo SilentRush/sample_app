@@ -58,5 +58,10 @@ $ ->
     $(".char-list").hide();
 
   $(".set-match-container").on "click", ".match-player", ->
-    $(this).toggleClass("Lose");
-    $(this).toggleClass("Win");
+    parent = $(this).parent();
+    win = parent.find(".Win");
+    lose = parent.find(".Lose");
+    win.toggleClass("Win");
+    win.toggleClass("Lose");
+    lose.toggleClass("Win");
+    lose.toggleClass("Lose");
