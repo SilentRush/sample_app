@@ -252,35 +252,37 @@
                                   set.topPlayer.eql?(match.winner) ? char = match.wchar.split(',').first.to_s : char = match.lchar.split(',').first.to_s
                                   char = "unknown" if char.empty?
                                    %>
-                                  <span class="set-character left"><%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %></span>
-                                  <div class="char-list">
-                                    <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Dk.png", alt: "Final Destination", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Dr. Mario.png", alt: "Fountain of Dreams", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Falco.png", alt: "Pokemon Stadium", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Fox.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ganondorf.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ice Climbers.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Jiggly Puff.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Kirby.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Luigi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mario.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Marth.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mewtwo.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mr. Game & Watch.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ness.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Peach.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Pichu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Pikachu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Roy.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Samus.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Sheik.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Yoshi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Young Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Zelda.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                  </div>
+                                  <span class="set-character left">
+                                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %>
+                                    <div class="char-list">
+                                      <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Dk.png", alt: "Final Destination", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Dr. Mario.png", alt: "Fountain of Dreams", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Falco.png", alt: "Pokemon Stadium", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Fox.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ganondorf.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ice Climbers.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Jiggly Puff.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Kirby.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Luigi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mario.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Marth.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mewtwo.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mr. Game & Watch.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ness.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Peach.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Pichu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Pikachu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Roy.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Samus.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Sheik.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Yoshi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Young Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Zelda.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                    </div>
+                                  </span>
                                 </div>
                                 <div class="match-map">
                                   <% match.map.empty? ? map = "unknown" : map = match.map %>
@@ -299,35 +301,38 @@
                                   set.bottomPlayer.eql?(match.winner) ? char = match.wchar.split(',').first.to_s : char = match.lchar.split(',').first.to_s
                                   char = "unknown" if char.empty?
                                    %>
-                                  <span class="set-character right"><%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %></span>
-                                  <div class="char-list">
-                                    <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Dk.png", alt: "Final Destination", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Dr. Mario.png", alt: "Fountain of Dreams", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Falco.png", alt: "Pokemon Stadium", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Fox.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ganondorf.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ice Climbers.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Jiggly Puff.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Kirby.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Luigi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mario.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Marth.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mewtwo.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Mr. Game & Watch.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Ness.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Peach.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Pichu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Pikachu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Roy.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Samus.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Sheik.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Yoshi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Young Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                    <%= image_tag("characters/Zelda.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
-                                  </div>
+                                  <span class="set-character right">
+                                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %>
+                                    <div class="char-list">
+                                      <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Dk.png", alt: "Final Destination", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Dr. Mario.png", alt: "Fountain of Dreams", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Falco.png", alt: "Pokemon Stadium", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Fox.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ganondorf.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ice Climbers.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Jiggly Puff.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Kirby.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Luigi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mario.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Marth.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mewtwo.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Mr. Game & Watch.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Ness.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Peach.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Pichu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Pikachu.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Roy.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Samus.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Sheik.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Yoshi.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Young Link.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                      <%= image_tag("characters/Zelda.png", alt: "Yoshi Story", class: "selectedChar charImg") %>
+                                    </div>
+                                  </span>
+
                                   <span><%= set.bottomPlayer.gamertag %></span>
                                 </div>
                               </div>
