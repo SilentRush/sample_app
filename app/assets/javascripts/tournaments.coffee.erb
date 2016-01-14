@@ -53,5 +53,5 @@ $ ->
     image = $(parent).find(".currMap");
     console.log(image);
     image.attr("src", $(this).attr("src"));
-    console.log(parent.find(".map-list"));
-    $(parent).find(".map-list")[0].css("display", "none");
+    console.log($(parent).find(".map-list"));
+    $(parent).find(".map-list").css("display", "none");
