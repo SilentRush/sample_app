@@ -52,10 +52,10 @@ $ ->
     if(row.length > 1)
       row.last().remove();
 
-  $(".set-match-container").on "click", ".currentMap" ->
+  $(".set-match-container").on "click", ".currentMap", ->
     $(this).parent().find(".map-list").show();
 
-  $(".set-match-container").on "click", ".selectedMap" ->
+  $(".set-match-container").on "click", ".selectedMap", ->
     parent = $(this).parent().parent();
     image = $(parent).find(".currMap");
     console.log(image);
@@ -63,10 +63,10 @@ $ ->
     console.log($(parent).find(".map-list"));
     $(".map-list").hide();
 
-  $(".set-match-container").on "click", ".currentChar" ->
+  $(".set-match-container").on "click", ".currentChar", ->
     $(this).parent().find(".char-list").show();
 
-  $(".set-match-container").on "click", ".selectedChar" ->
+  $(".set-match-container").on "click", ".selectedChar", ->
     parent = $(this).parent().parent();
     image = $(parent).find(".currChar");
     console.log(image);
