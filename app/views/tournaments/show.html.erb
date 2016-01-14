@@ -256,7 +256,7 @@
                                 </div>
                                 <div class="match-map">
                                   <% match.map.empty? ? map = "unknown" : map = match.map %>
-                                  <span><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "currMap charImg") if !map.empty? %></span>
+                                  <span class="currentMap"><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "currMap charImg") if !map.empty? %></span>
                                   <div class="map-list">
                                     <%= image_tag("maps/Battlefield.png", alt: "Battlefield", class: "selectedMap charImg") %>
                                     <%= image_tag("maps/Dreamland.png", alt: "Dreamland", class: "selectedMap charImg") %>
