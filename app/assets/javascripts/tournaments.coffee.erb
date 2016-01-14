@@ -45,9 +45,8 @@ $ ->
     if(row.length > 1)
       row.last().remove();
 
-  $(".match-map").click ->
+  $(".currMap").click ->
     $(this).find(".map-list").show();
-    console.log("match");
 
   $(".selectedMap").click ->
     parent = $(this).parent().parent();
