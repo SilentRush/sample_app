@@ -46,7 +46,7 @@ $ ->
       row.last().remove();
 
   $(".match-map").click ->
-    $(this).find(".map-list").css("display", "block");
+    $(this).find(".map-list").show();
 
   $(".selectedMap").click ->
     parent = $(this).parent().parent();
@@ -54,4 +54,4 @@ $ ->
     console.log(image);
     image.attr("src", $(this).attr("src"));
     console.log($(parent).find(".map-list"));
-    $(parent).find(".map-list").css("display", "none");
+    $(parent).find(".map-list").hide();
