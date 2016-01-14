@@ -52,4 +52,4 @@ $ ->
     parent = $(this).parent(".match-map");
     image = $(parent).find(".currMap");
     console.log(image);
-    image.attr("src", <%= image-url($(this).attr("alt") + '.png') %>)
+    image.attr("src", $(this).attr("src"));
