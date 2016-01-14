@@ -51,7 +51,8 @@ $ ->
   $(".selectedMap").click ->
     parent = $(this).parent().parent();
     image = $(parent).find(".currMap");
+    matchlist = $(this).parent();
     console.log(image);
     image.attr("src", $(this).attr("src"));
-    console.log($(this).parent().find(".map-list"));
-    $(this).parent().find(".map-list").css("display", "none");
+    console.log(matchlist);
+    matchlist.find(".map-list").css("display", "none");
