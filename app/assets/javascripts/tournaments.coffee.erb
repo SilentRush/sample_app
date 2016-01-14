@@ -49,7 +49,7 @@ $ ->
     $(this).find(".map-list").css("display", "block");
 
   $(".selectedMap").click ->
-    parent = $(this).parent(".match-map");
+    parent = $(this).parent().parent();
     image = $(parent).find(".currMap");
     console.log(image);
     image.attr("src", $(this).attr("src"));
