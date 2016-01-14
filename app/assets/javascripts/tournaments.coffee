@@ -44,3 +44,6 @@ $ ->
     row = div.find(".match-row");
     if(row.length > 1)
       row.last().remove();
+
+  $(".match-map").click ->
+    $(this).find(".map-list").toggle();
