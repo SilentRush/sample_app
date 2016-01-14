@@ -247,7 +247,7 @@
                         <% set.gamematches.each_with_index do |match, index| %>
                               <div class="match-row">
                                 <div class="match-player <%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
-                                  <span><%= set.topPlayer.gamertag %></span>
+                                  <span class="match-playername"><%= set.topPlayer.gamertag %></span>
                                   <% char = ""
                                   set.topPlayer.eql?(match.winner) ? char = match.wchar.split(',').first.to_s : char = match.lchar.split(',').first.to_s
                                   char = "unknown" if char.empty?
@@ -333,7 +333,7 @@
                                     </div>
                                   </span>
 
-                                  <span><%= set.bottomPlayer.gamertag %></span>
+                                  <span class="match-playername"><%= set.bottomPlayer.gamertag %></span>
                                 </div>
                               </div>
                         <% end %>

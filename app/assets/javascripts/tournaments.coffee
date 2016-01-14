@@ -56,3 +56,7 @@ $ ->
     image.attr("src", $(this).attr("src"));
     console.log($(parent).find(".char-list"));
     $(".char-list").hide();
+
+  $(".set-match-container").on "click", ".match-player", ->
+    $(this).toggleClass("Lose");
+    $(this).toggleClass("Win");
