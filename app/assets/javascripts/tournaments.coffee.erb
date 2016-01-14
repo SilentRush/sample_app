@@ -46,4 +46,10 @@ $ ->
       row.last().remove();
 
   $(".match-map").click ->
-    $(this).find(".map-list").toggle();
+    $(this).find(".map-list").css("display:block;");
+
+  $(".selectedMap").click ->
+    parent = $(this).parent(".match-map");
+    image = $(parent).find(".currMap");
+    image.attr("src", <%= image-url($(this).attr("alt") + '.png') %>)
+    

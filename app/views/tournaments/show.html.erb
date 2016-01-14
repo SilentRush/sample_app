@@ -256,14 +256,14 @@
                                 </div>
                                 <div class="match-map">
                                   <% match.map.empty? ? map = "unknown" : map = match.map %>
-                                  <span><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "charImg") if !map.empty? %></span>
+                                  <span><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "currMap charImg") if !map.empty? %></span>
                                   <div class="map-list">
-                                    <%= image_tag("maps/Battlefield.png", alt: "Battlefield", class: "charImg") %>
-                                    <%= image_tag("maps/Dreamland.png", alt: "Dreamland", class: "charImg") %>
-                                    <%= image_tag("maps/Final Destination.png", alt: "Final Destination", class: "charImg") %>
-                                    <%= image_tag("maps/Fountain of Dreams.png", alt: "Fountain of Dreams", class: "charImg") %>
-                                    <%= image_tag("maps/Pokemon Stadium.png", alt: "Pokemon Stadium", class: "charImg") %>
-                                    <%= image_tag("maps/Yoshi Story.png", alt: "Yoshi Story", class: "charImg") %>
+                                    <%= image_tag("maps/Battlefield.png", alt: "Battlefield", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/Dreamland.png", alt: "Dreamland", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/Final Destination.png", alt: "Final Destination", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/Fountain of Dreams.png", alt: "Fountain of Dreams", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/Pokemon Stadium.png", alt: "Pokemon Stadium", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/Yoshi Story.png", alt: "Yoshi Story", class: "selectedMap charImg") %>
                                   </div>
                                 </div>
                                 <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
