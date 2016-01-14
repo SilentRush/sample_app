@@ -253,7 +253,7 @@
                                   char = "unknown" if char.empty?
                                    %>
                                   <span class="set-character left">
-                                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %>
+                                    <span class="currChar"><%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %></span>
                                     <div class="char-list">
                                       <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
                                       <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
@@ -302,7 +302,7 @@
                                   char = "unknown" if char.empty?
                                    %>
                                   <span class="set-character right">
-                                    <%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %>
+                                    <span class="currChar"><%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "currChar charImg") if !char.empty? %></span>
                                     <div class="char-list">
                                       <%= image_tag("characters/Bowser.png", alt: "Battlefield", class: "selectedChar charImg") %>
                                       <%= image_tag("characters/Captain Falcon.png", alt: "Dreamland", class: "selectedChar charImg") %>
