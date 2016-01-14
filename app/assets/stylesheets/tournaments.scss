@@ -965,6 +965,11 @@ span.set-info-editbtn{
   padding-left: 10px;
 }
 
+span.set-character {
+  display: table-cell;
+  width: $imgSize;
+}
+
 div.match-plus-minus{
   display: table-cell;
   padding-left: 10px;
