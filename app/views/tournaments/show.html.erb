@@ -246,7 +246,7 @@
                         <div class="set-match-container">
                         <% set.gamematches.each_with_index do |match, index| %>
                               <div class="match-row">
-                                <div class="match-player <%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>" id="topPlayer<% index %>">
+                                <div class="match-player <%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
                                   <span><%= set.topPlayer.gamertag %></span>
                                   <% char = ""
                                   set.topPlayer.eql?(match.winner) ? char = match.wchar.split(',').first.to_s : char = match.lchar.split(',').first.to_s
@@ -254,11 +254,11 @@
                                    %>
                                   <span class="set-character left"><%= image_tag("characters/#{char}.png", alt: "#{char.humanize}", class: "charImg") if !char.empty? %></span>
                                 </div>
-                                <div class="match-map" id="map<% index %>">
+                                <div class="match-map">
                                   <% match.map.empty? ? map = "unknown" : map = match.map %>
                                   <span><%= image_tag("maps/#{map}.png", alt: "#{map.humanize}", class: "charImg") if !map.empty? %></span>
                                 </div>
-                                <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>" id="bottomPlayer<% index %>">
+                                <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
                                   <%
                                   set.bottomPlayer.eql?(match.winner) ? char = match.wchar.split(',').first.to_s : char = match.lchar.split(',').first.to_s
                                   char = "unknown" if char.empty?
@@ -270,13 +270,19 @@
                         <% end %>
 
                       </div>
-                      <div class="set-url">
+                      <div class="set-footer">
                         <div class="set-url">
-                          <%= link_to image_tag("youtube.png", alt: "SilentRush Youtube", class: "linkIcons"),
-                                      'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
-                          <span class="set-info-editbtn">
-                            <%= link_to 'Edit', edit_gameset_path(set), class: "btn btn-sm btn-primary"  %>
-                          </span>
+                          <div class="set-url">
+                            <%= link_to image_tag("youtube.png", alt: "SilentRush Youtube", class: "linkIcons"),
+                                        'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
+                            <span class="set-info-editbtn">
+                              <%= link_to 'Edit', edit_gameset_path(set), class: "btn btn-sm btn-primary"  %>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="match-plus-minus">
+                          <input type="button" class="plus btn btn-sm btn-primary" value="+" />
+                          <input type="button" class="minus btn btn-sm btn-danger" value="-"  />
                         </div>
                       </div>
                     </div>

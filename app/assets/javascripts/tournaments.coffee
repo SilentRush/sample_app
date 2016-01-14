@@ -18,3 +18,29 @@ $ ->
     $('.tabs ' + currentAttrValue).show().siblings().hide();
     $(this).parent('li').addClass('active').siblings().removeClass('active');
     event.preventDefault();
+
+  $(".plus").click ->
+    parent = $(this).parent().parent().parent();
+    id = parent.find(".match-row").length + 1;
+    div = parent.find(".set-match-container");
+    html = "<div class=\"match-row\">
+              <div class=\"match-player Win\">
+                <span>" + div.find(".Win").first().text() + "</span>
+                <span class=\"set-character left\"><img alt=\"Peach\" class=\"charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
+              </div>
+              <div class=\"match-map\">
+                <span><img alt=\"Unknown\" class=\"charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
+              </div>
+              <div class=\"match-player Lose\">
+                <span class=\"set-character right\"><img alt=\"Fox\" class=\"charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
+                <span>" + div.find(".Lose").first().text() + "</span>
+              </div>
+            </div>";
+    div.append(html);
+
+  $(".minus").click ->
+    parent = $(this).parent().parent().parent();
+    div = parent.find(".set-match-container");
+    row = div.find(".match-row");
+    if(row.length > 1)
+      row.last().remove();
