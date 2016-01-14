@@ -33,7 +33,7 @@ $ ->
               <div class=\"match-map\">
                 <span class=\"currentMap\"><img alt=\"Unknown\" class=\"charImg\" src=\"/assets/maps/unknown-c3b3146dd682fcb2c5ef80378aa356fb367891f27829067aa7125b020b62db73.png\"></span>
                 <div class=\"map-list\">
-                  " + div.find(".map-list").html() + "
+                  " + div.find(".map-list").first().html() + "
                 </div>
               </div>
               <div class=\"match-player Lose\">
