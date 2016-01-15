@@ -84,7 +84,7 @@ class GamesetsController < ApplicationController
         loser = Player
         map = params["map#{index + 1}"]
         match = Gamematch.find_by(matchnum: index + 1)
-        match = Gamematch.create() if !match.valid?
+        match = Gamematch.create() if match.nil?
         if params["topPlayer#{index + 1}"].eql?("Win")
           wchar = params["topChar#{index + 1}"]
           lchar = params["bottomChar#{index + 1}"]
