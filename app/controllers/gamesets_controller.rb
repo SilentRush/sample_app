@@ -47,20 +47,65 @@ class GamesetsController < ApplicationController
 
   def update
     @gameset = Gameset.find(params[:id])
-    winner = Player.find_by(gamertag: params[:winner])
-    loser = Player.find_by(gamertag: params[:loser])
-    params[:winner] = winner
-    params[:loser] = loser
+    wscore = 0
+    lscore = 0
+    winner = Player
+    loser = Player
+    tplayerScore = 0
+    bplayerScore = 0
+    wscore = 0
+    lscore = 0
 
-    if @gameset.update(gameset_params)
-      redirect_to controller: "gamematchs", action: "batchMatch", id: @gameset.id
+    params[:matchCount].to_i.times do |index|
+      tplayerScore += 1 if params["topPlayer#{index + 1}"].eql?("Win")
+      bplayerScore += 1 if params["bottomPlayer#{index + 1}"].eql?("Win")
+    end
+    if tplayerScore > bplayerScore
+      winner = Player.find_by(gamertag: params[:topPlayer])
+      loser = Player.find_by(gamertag: params[:bottomPlayer])
+      wscore = tplayerScore
+      lscore = bplayerScore
+    else
+      loser = Player.find_by(gamertag: params[:topPlayer])
+      winner = Player.find_by(gamertag: params[:bottomPlayer])
+      wscore = bplayerScore
+      lscore = tplayerScore
+    end
+
+    puts wscore
+    puts lscore
+
+    if @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
+      @gameset.gamematches.each do |match|
+        match.destroy
+      end
+      params[:matchCount].to_i.times do |index|
+        matchnum = index + 1
+        wchar = ""
+        lchar = ""
+        winner = Player
+        loser = Player
+        map = params["map#{index + 1}"]
+        match = Gamematch
+        if params["topPlayer#{index + 1}"].eql?("Win")
+          wchar = params["topChar#{index + 1}"]
+          lchar = params["bottomChar#{index + 1}"]
+          winner = Player.find_by(gamertag: params[:topPlayer])
+          loser = Player.find_by(gamertag: params[:bottomPlayer])
+          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+        else
+          wchar = params["bottomChar#{index + 1}"]
+          lchar = params["topChar#{index + 1}"]
+          winner = Player.find_by(gamertag: params[:bottomPlayer])
+          loser = Player.find_by(gamertag: params[:topPlayer])
+          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+        end
+        match.save
+      end
+      redirect_to tournament_path @gameset.tournament
     else
       render 'edit'
     end
   end
 
-  private
-    def gameset_params
-      params.permit(:winner, :loser, :wscore, :lscore)
-    end
 end

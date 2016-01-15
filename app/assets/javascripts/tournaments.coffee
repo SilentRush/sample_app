@@ -26,7 +26,15 @@ $ ->
     html = "<div class=\"match-row\">
               " + div.find(".match-row").html() + "
             </div>";
-    div.append(html);
+    if(id < 8)
+      div.append(html);
+      newRow = div.find(".match-row").last();
+      newRow.find(".match-player").first().find("input").attr("name","topPlayer" + id);
+      newRow.find(".match-player").last().find("input").attr("name","bottomPlayer" + id);
+      newRow.find(".set-character").first().find("input").attr("name","topChar" + id);
+      newRow.find(".set-character").last().find("input").attr("name","bottomChar" + id);
+      newRow.find(".match-map").first().find("input").attr("name","map" + id);
+      parent.find("[name=matchCount]").attr("value", id);
 
   $(".minus").click ->
     parent = $(this).parent().parent().parent();
@@ -34,6 +42,9 @@ $ ->
     row = div.find(".match-row");
     if(row.length > 1)
       row.last().remove();
+    id = parent.find(".match-row").length;
+    console.log(id);
+    parent.find("[name=matchCount]").attr("value", id);
 
   $(".set-match-container").on "click", ".currentMap", ->
     $(this).parent().find(".map-list").show();
@@ -41,10 +52,12 @@ $ ->
   $(".set-match-container").on "click", ".selectedMap", ->
     parent = $(this).parent().parent();
     image = $(parent).find(".currMap");
-    console.log(image);
     image.attr("src", $(this).attr("src"));
-    console.log($(parent).find(".map-list"));
+    image.attr("alt", $(this).attr("alt"));
+    map = $(this).attr("alt");
+    parent.find("input").attr("value", map);
     $(".map-list").hide();
+
 
   $(".set-match-container").on "click", ".currentChar", ->
     $(this).parent().find(".char-list").show();
@@ -52,9 +65,10 @@ $ ->
   $(".set-match-container").on "click", ".selectedChar", ->
     parent = $(this).parent().parent();
     image = $(parent).find(".currChar");
-    console.log(image);
     image.attr("src", $(this).attr("src"));
-    console.log($(parent).find(".char-list"));
+    image.attr("alt", $(this).attr("alt"));
+    char = $(this).attr("alt");
+    parent.find("input").attr("value", char);
     $(".char-list").hide();
 
   $(".set-match-container").on "click", ".match-player", ->
@@ -65,3 +79,5 @@ $ ->
     win.toggleClass("Lose");
     lose.toggleClass("Win");
     lose.toggleClass("Lose");
+    win.find("input").attr("value", "Lose");
+    lose.find("input").attr("value", "Win");

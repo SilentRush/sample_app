@@ -969,6 +969,10 @@ span.set-character {
   width: $imgSize;
 }
 
+span.currentChar {
+  width: 40px;
+}
+
 div.match-plus-minus{
   display: table-cell;
   padding-left: 10px;
