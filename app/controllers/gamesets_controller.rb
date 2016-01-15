@@ -90,15 +90,14 @@ class GamesetsController < ApplicationController
           lchar = params["bottomChar#{index + 1}"]
           winner = Player.find_by(gamertag: params[:topPlayer])
           loser = Player.find_by(gamertag: params[:bottomPlayer])
-          match = Gamematch.update(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          match.update(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
         else
           wchar = params["bottomChar#{index + 1}"]
           lchar = params["topChar#{index + 1}"]
           winner = Player.find_by(gamertag: params[:bottomPlayer])
           loser = Player.find_by(gamertag: params[:topPlayer])
-          match = Gamematch.update(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          match.update(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
         end
-        match.save
       end
       redirect_to tournament_path @gameset.tournament
     else
