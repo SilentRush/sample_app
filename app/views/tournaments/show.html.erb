@@ -27,7 +27,7 @@
                   firstTime = true
                 %>
                 <td>
-                  <% sets = @tournament.gamesets.where("roundnum = ?", (i + 1))
+                  <% sets = @tournament.gamesets.where("roundnum = ?", (i + 1)).order(setnum: :asc)
                     setSize = sets.size
                     sets.each_with_index do |set, index| %>
                     <%
