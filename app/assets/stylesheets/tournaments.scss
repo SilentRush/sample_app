@@ -944,6 +944,7 @@ div.match-player {
 div.match-map {
   display: table-cell;
   width: $imgSize;
+  cursor: pointer;
 }
 
 div.match-player.Win{
@@ -953,6 +954,7 @@ div.match-player.Win{
 }
 div.match-player{
   width: 160px;
+  cursor: pointer;
 }
 
 div.set-url{
@@ -971,6 +973,7 @@ span.set-character {
 
 span.currentChar {
   width: 40px;
+  cursor: pointer;
 }
 
 div.match-plus-minus{
@@ -1004,4 +1007,12 @@ div.char-list {
 
 div.set-footer {
   display: table-row;
+}
+
+div.selectedMap {
+  cursor: pointer;
+}
+
+div.selectedChar {
+  cursor: pointer;
 }
