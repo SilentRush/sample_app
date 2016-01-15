@@ -9,8 +9,7 @@ Rails.application.routes.draw do
   resources :gamesets
   resources :gamematchs
 
-  get 'batchMatch' => 'gamematchs#batchMatch'
-  post 'batchMatch' => 'gamesets#batchMatch'
+  post 'gamesets/update' => 'gamesets#update'
 
   get 'players/new'
 

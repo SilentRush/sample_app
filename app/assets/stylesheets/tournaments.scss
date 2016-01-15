@@ -937,22 +937,23 @@ div.match-row {
   display: table-row;
 }
 
-div.match-player {
-  display: table-cell;
-}
-
 div.match-map {
   display: table-cell;
   width: $imgSize;
+  cursor: pointer;
+}
+
+div.match-player{
+  display: table-cell;
+  width: 160px;
+  border-radius: 15px 15px 15px 15px;
+  cursor: pointer;
 }
 
 div.match-player.Win{
   background-color:  rgba(8, 141, 230, 0.35);
   border-radius: 15px 15px 15px 15px;
   font-weight: bold;
-}
-div.match-player{
-  width: 160px;
 }
 
 div.set-url{
@@ -969,6 +970,11 @@ span.set-character {
   width: $imgSize;
 }
 
+span.currentChar {
+  width: 40px;
+  cursor: pointer;
+}
+
 div.match-plus-minus{
   display: table-cell;
   padding-left: 10px;
@@ -980,25 +986,48 @@ div.match-plus-minus .btn{
 
 div.map-list {
   position: absolute;
-  width: 315px;
-  left: 42px;
-  margin-top: -82px;
-  background-color: rgba(175, 44, 44, 0.89);
+  left: 70px;
+  margin-top: -35px;
+  background-color: rgba(156, 156, 156, 0.88);
   border-radius: 10px 10px 10px 10px;
   padding: 3px;
   display: none;
+  border: 2px solid #505050;
 }
 
 div.char-list {
   position: absolute;
   left: 70px;
   margin-top: -35px;
-  background-color: rgba(175, 44, 44, 0.89);
+  background-color: rgba(156, 156, 156, 0.88);
   border-radius: 10px 10px 10px 10px;
   padding: 3px;
   display: none;
+  border: 2px solid #505050;
 }
 
 div.set-footer {
   display: table-row;
+}
+
+img.selectedMap {
+  cursor: pointer;
+}
+
+img.selectedChar {
+  cursor: pointer;
+}
+
+//hover effects
+.match-player:hover, .match-player.win:hover,
+.currChar:hover, .currMap:hover, .selectedMap:hover {
+  box-shadow: 0 0 8px #0F8E19;
+}
+
+.selectedChar:hover {
+  background-color: rgba(41, 218, 20, 0.85);
+}
+
+.currentChar:hover {
+
 }
