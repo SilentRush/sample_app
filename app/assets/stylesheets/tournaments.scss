@@ -1016,3 +1016,17 @@ div.selectedMap {
 div.selectedChar {
   cursor: pointer;
 }
+
+//hover effects
+.match-player:hover, .match-player.win:hover,
+  .currChar:hover, .currMap:hover, .selectedMap:hover {
+  box-shadow: 0 0 8px #0F8E19;
+}
+
+.selectedChar:hover {
+  background-color: rgba(41, 218, 20, 0.85);
+}
+
+.currentChar:hover {
+
+}
