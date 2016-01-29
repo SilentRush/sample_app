@@ -2,25 +2,35 @@ require "../config/environment"
 
 def createNewTournament(players, details)
   size = players.size
-  size = 11
   tsize = (2 ** (Math.log(size, 2).ceil))
   pseedArr = seeding(size)
+  @tournament = Tournament.new
+  @tournament.name = "Testing"
+  @tournament.date =  "10/12/16"
+  @tournament.description = "This is a test tournament"
+  #@tournament.url = "http://test.test.com"
+  @tournament.save
+
   pseedHash = {}
   players.each_with_index do |player,index|
+    currPlayer = Player.find_by(gamertag: player)
+    currPlayer = Player.create(gamertag: player, name: "", characters: "", wins: 0, loses: 0, winrate: 0) if currPlayer.nil?
+    currPlayer.tournaments << @tournament
+    currPlayer.save
     pseedHash["s#{index + 1}"] = player
   end
   puts pseedHash.to_s
-  tournament = Tournament.new
-  tournament.name = "Testing"
-  tournament.date =  "10/12/16"
-  tournament.description = "This is a test tournament"
-  tournament.url = "http://test.test.com"
-  sets = initializeSets(pseedArr, tsize, size, pseedHash)
-  puts tournament.new_record?
+
+  sets = initializeSets(pseedArr, tsize, pseedHash)
+  @tournament.update(winnersRounds: sets.select{|x| x[:roundnum] > 0}.last.roundnum, losersRounds: sets.select{|x| x[:roundnum] < 0}.last.roundnum)
+  updateSetTraversal(sets, tsize)
+  @tournament.gamesets.each do |set|
+    puts set.inspect
+  end
 
 end
 
-def initializeSets(seed, tsize, size, players)
+def initializeSets(seed, tsize, players)
   setsArr = []
   setsInWinnerOne = 0
   setsInRound = (tsize/2)
@@ -34,32 +44,45 @@ def initializeSets(seed, tsize, size, players)
         bottomPlayer = Player.find_by(gamertag: players["s#{seed[count+1]}"])
         puts topPlayer.gamertag.to_s if !topPlayer.nil?
         puts bottomPlayer.gamertag.to_s if !bottomPlayer.nil?
+        set.topPlayer = topPlayer
+        set.bottomPlayer = bottomPlayer
       end
-      setsArr.push()
+      set.setnum = i + 1
+      set.roundnum = index + 1
+      set.tournament = @tournament
+      set.save
+      setsArr.push(set)
       count += 2
     end
     setsInRound /= 2
   end
-  setsArr.push({round: winnersRounds + 1})
-  setsArr.push({round: winnersRounds + 2})
-=begin
+  grandSetOne = Gameset.new(setnum: 1, roundnum: winnersRounds + 1, tournament_id: @tournament.id)
+  grandSetTwo = Gameset.new(setnum: 1, roundnum: winnersRounds + 2, tournament_id: @tournament.id)
+  grandSetOne.save
+  grandSetTwo.save
+  setsArr.push(grandSetOne)
+  setsArr.push(grandSetTwo)
+
+
   l2 = Math.log(tsize, 2)
   losersRounds = (l2).ceil + Math.log(l2,2).ceil
   totalP = 2**(l2.ceil)
-  losersRounds -= 1 if((totalP * 0.75) >= size)
+  losersRounds -= 1 if((totalP * 0.75) >= tsize)
   losersRounds = 1 if tsize == 3
   losersRounds = 2 if tsize == 4
-  losersRounds = 3 if tsize == 5 || size == 6
-  losersRounds = 4 if tsize == 7 || size == 8
+  losersRounds = 3 if tsize == 5 || tsize == 6
+  losersRounds = 4 if tsize == 7 || tsize == 8
 
-  setsInRound = ((2 ** (Math.log(tsize, 2).ceil))/2)/2
-  nsize = (tsize / 2).round
+  setsInRound = (tsize/2)/2
   losersRounds.times do |index|
     count = 0
-    numRounds = (setsInWinnerOne - setsInRound) if losersRounds % 2 == 0
-    numRounds = setsInWinnerOne * 2 if losersRounds % 2 != 0
     setsInRound.times do |i|
-
+      set = Gameset.new()
+      set.setnum = i + 1
+      set.roundnum = -(index + 1)
+      set.tournament = @tournament
+      set.save
+      setsArr.push(set)
     end
     if losersRounds % 2 != 0
       setsInRound /= 2 if (index + 1) % 2 != 0
@@ -67,11 +90,58 @@ def initializeSets(seed, tsize, size, players)
       setsInRound /= 2 if (index + 1) % 2 == 0
     end
   end
-=end
 
-  puts setsArr.to_s
-  puts setsArr.size
+  return setsArr
 
+end
+
+def updateSetTraversal(sets, tsize)
+  @tournament.winnersRounds.times do |index|
+    sets.select{|x| x[:roundnum] == index + 1}.each_with_index do |set, i|
+      if (index + 1) == 1
+        loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1), (set.setnum.to_f/2).ceil, @tournament.id).first
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
+        set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+      elsif (index + 1) == 2
+        setsInReverse = sets.select{|x| x[:roundnum] == index + 1}.reverse
+        loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1), setsInReverse[i].setnum, @tournament.id).first
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
+        set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+      else
+        if (index + 1) % 2 == 0
+          setsInReverse = sets.select{|x| x[:roundnum] == index + 1}.reverse
+          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), setsInReverse[i].setnum, @tournament.id).first
+          winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
+          set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+        else
+          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), set.setnum, @tournament.id).first
+          winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
+          set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+        end
+      end
+      if (index + 1) == @tournament.winnersRounds - 1
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
+        loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
+        set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+      end
+    end
+  end
+  losersRounds = (@tournament.losersRounds) * -1
+  losersRounds.times do |index|
+    sets.select{|x| x[:roundnum] == -(index + 1)}.each_with_index do |set, i|
+      if set.roundnum % 2 == 0
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
+        set.update(toWinnerSet: winnerSet) if !winnerSet.nil?
+      else
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), set.setnum, @tournament.id).first
+        set.update(toWinnerSet: winnerSet) if !winnerSet.nil?
+      end
+      if (index + 1) == losersRounds
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 1), set.setnum, @tournament.id).first
+        set.update(toWinnerSet: winnerSet) if !winnerSet.nil?
+      end
+    end
+  end
 end
 
 def seeding(numPlayers)
