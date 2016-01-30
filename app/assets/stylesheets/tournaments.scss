@@ -862,11 +862,14 @@ table.bracket-container {
 
 div.set-information {
   width: 400px;
-  background-color: rgba(242,242,242,0.9);
+  background-color: #FFFFFF;
   box-shadow: 4px 4px 6px #BBBBBB;
   border: 1px solid #aaa;
   display: none;
-  position: absolute;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px;
   //margin-left: 170px;
   //margin-top: -130px;
 }
@@ -883,11 +886,14 @@ span.set-information-close {
 
 div.set-information.show {
   width: 400px;
-  background-color: rgba(242,242,242,0.9);
+  background-color: #FFFFFF;
   box-shadow: 4px 4px 6px #BBBBBB;
   border: 1px solid #aaa;
   display: block;
-  position: absolute;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -200px;
   //margin-left: 170px;
   //margin-top: -130px;
 }

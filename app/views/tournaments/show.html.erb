@@ -22,7 +22,7 @@
             </thead>
             <tbody>
                 <%
-                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).ceil)) / 2 ) / 2
+                  roundMax = ( (2 ** (Math.log(@tournament.players.size, 2).ceil)) / 2 )
                   @tournament.winnersRounds.times do |i|
                   firstTime = true
                 %>
@@ -33,29 +33,31 @@
                     <%
                         topIsWinner = false
                         botIsWinner = false
-                        set.winner == set.topPlayer ? topIsWinner = true : botIsWinner = true
+                        topIsWinner = true if set.winner == set.topPlayer && !set.topPlayer.nil?
+                        botIsWinner = true if set.winner == set.bottomPlayer && !set.bottomPlayer.nil?
                      %>
                     <%
-                      wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
-                      lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
-                      winningChars = []
-                      losingChars = []
-                      wchar.each do |match|
-                        match.wchar.split(',').each do |char|
-                         winningChars.push(char) if !winningChars.include? char
+
+                        wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
+                        lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
+                        winningChars = []
+                        losingChars = []
+                        wchar.each do |match|
+                          match.wchar.split(',').each do |char|
+                           winningChars.push(char) if !winningChars.include? char
+                          end
+                          match.lchar.split(',').each do |char|
+                            losingChars.push(char) if !losingChars.include? char
+                          end
                         end
-                        match.lchar.split(',').each do |char|
-                          losingChars.push(char) if !losingChars.include? char
+                        lchar.each do |match|
+                          match.lchar.split(',').each do |char|
+                           losingChars.push(char) if !losingChars.include? char
+                          end
+                          match.wchar.split(',').each do |char|
+                           winningChars.push(char) if !winningChars.include? char
+                          end
                         end
-                      end
-                      lchar.each do |match|
-                        match.lchar.split(',').each do |char|
-                         losingChars.push(char) if !losingChars.include? char
-                        end
-                        match.wchar.split(',').each do |char|
-                         winningChars.push(char) if !winningChars.include? char
-                        end
-                      end
                     %>
                         <% ((roundMax/setSize) - 1).times do |x| %>
                           <% if firstTime %>
@@ -97,7 +99,7 @@
                         <% end %>
                         <% firstTime = false %>
 
-                    <% if set.winner.nil? && set.loser.nil? %>
+                    <% if 1 == 2 %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
                     <% ran = Random.new()
@@ -110,31 +112,33 @@
                                 <div class="match_top_half">
                                   <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
                                   <div class="inner_content" data-round="1">
-                                    <% if topIsWinner %>
-                                      <% winningChars.each do |char| %>
-                                      <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                      <% if topIsWinner && !set.topPlayer.nil? %>
+                                        <% winningChars.each do |char| %>
+                                        <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                        <% end %>
                                       <% end %>
-                                    <% else %>
-                                      <% losingChars.each do |char| %>
-                                      <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                      <% if botIsWinner && !set.topPlayer.nil? %>
+                                        <% losingChars.each do |char| %>
+                                        <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                        <% end %>
                                       <% end %>
-                                    <% end %>
-                                    <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                    <span style="" title="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
                                   </div>
                                 </div>
                                 <div class="match_bottom_half">
                                   <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
                                   <div class="inner_content" data-participant_id="34398092" data-round="1">
-                                    <% if botIsWinner %>
-                                      <% winningChars.each do |char| %>
-                                      <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                      <% if botIsWinner && !set.bottomPlayer.nil? %>
+                                        <% winningChars.each do |char| %>
+                                        <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                        <% end %>
                                       <% end %>
-                                    <% else %>
-                                      <% losingChars.each do |char| %>
-                                      <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                      <% if topIsWinner && !set.bottomPlayer.nil? %>
+                                        <% losingChars.each do |char| %>
+                                        <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                        <% end %>
                                       <% end %>
-                                    <% end %>
-                                    <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                    <span style="" title="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
                                   </div>
                                 </div>
                                 <div class="shadow"></div>
@@ -232,14 +236,14 @@
                       <div class="set-table">
                           <div class="set-title">
                               <div class="set-player top">
-                                <span><%= set.topPlayer.gamertag %></span>
-                                <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag %>" />
+                                <span><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>" />
                               </div>
                               <div class="set-character">
                               </div>
                               <div class="set-player bot">
-                                <span><%= set.bottomPlayer.gamertag %></span>
-                                <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag %>" />
+                                <span><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
+                                <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>" />
                                 <span class="set-information-close">X</span>
                               </div>
                           </div>
@@ -251,15 +255,15 @@
                               <%
                                 topChar = ""
                                 botChar = ""
-                                set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s
-                                set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s
+                                (set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s) if !set.topPlayer.nil?
+                                (set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s) if !set.bottomPlayer.nil?
                                 topChar = "unknown" if topChar.empty?
                                 botChar = "unknown" if botChar.empty?
                               %>
                               <div class="match-row">
-                                <div class="match-player <%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
-                                  <span class="match-playername"><%= set.topPlayer.gamertag %></span>
-                                  <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
+                                <div class="match-player <%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>">
+                                  <span class="match-playername"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                  <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>" />
                                 </div>
                                 <span class="set-character left">
                                   <span class="currentChar"><%= image_tag("characters/#{topChar}.png", alt: "#{topChar}", class: "currChar charImg") if !topChar.empty? %></span>
@@ -340,7 +344,7 @@
                                 </span>
 
                                 <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
-                                  <span class="match-playername"><%= set.bottomPlayer.gamertag %></span>
+                                  <span class="match-playername"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
                                   <input type="hidden" name="bottomPlayer<%= index + 1 %>" value="<%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
                                 </div>
                               </div>
@@ -401,13 +405,14 @@
                   <% sets = @tournament.gamesets.where("roundnum = ?", -(i + 1)).order(setnum: :asc)
                   setSize = sets.size
                   sets.each_with_index do |set, index| %>
-                    <%
-                        topIsWinner = false
-                        botIsWinner = false
-                        set.winner == set.topPlayer ? topIsWinner = true : botIsWinner = true
-                     %>
+                  <%
+                      topIsWinner = false
+                      botIsWinner = false
+                      topIsWinner = true if set.winner == set.topPlayer && !set.topPlayer.nil?
+                      botIsWinner = true if set.winner == set.bottomPlayer && !set.bottomPlayer.nil?
+                   %>
+                  <%
 
-                    <%
                       wchar = Gamematch.select("wchar", "lchar").where(tournament: @tournament, winner: set.winner, gameset: set)
                       lchar = Gamematch.select("lchar", "wchar").where(tournament: @tournament, loser: set.loser, gameset: set)
                       winningChars = []
@@ -428,7 +433,7 @@
                          winningChars.push(char) if !winningChars.include? char
                         end
                       end
-                    %>
+                  %>
 
                     <% ((roundMax/setSize) - 1).times do |x| %>
                       <% if firstTime %>
@@ -470,7 +475,7 @@
                     <% end %>
                     <% firstTime = false %>
 
-                    <% if set.winner.nil? && set.loser.nil? %>
+                    <% if 1 == 2 %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
 
@@ -485,31 +490,33 @@
                                     <div class="match_top_half">
                                       <div class="top_score <%= "winner" if topIsWinner %>"><%= topIsWinner ? set.wscore : set.lscore%></div>
                                       <div class="inner_content" data-round="1">
-                                        <% if topIsWinner %>
-                                          <% winningChars.each do |char| %>
-                                          <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                          <% if topIsWinner && !set.topPlayer.nil? %>
+                                            <% winningChars.each do |char| %>
+                                            <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                            <% end %>
                                           <% end %>
-                                        <% else %>
-                                          <% losingChars.each do |char| %>
-                                          <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                          <% if botIsWinner && !set.topPlayer.nil? %>
+                                            <% losingChars.each do |char| %>
+                                            <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                            <% end %>
                                           <% end %>
-                                        <% end %>
-                                        <span style="" title="<%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= topIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                        <span style="" title="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
                                       </div>
                                     </div>
                                     <div class="match_bottom_half">
                                       <div class="bottom_score <%= "winner" if botIsWinner %>"><%= botIsWinner ? set.wscore : set.lscore%></div>
                                       <div class="inner_content" data-participant_id="34398092" data-round="1">
-                                        <% if botIsWinner %>
-                                          <% winningChars.each do |char| %>
-                                          <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                          <% if botIsWinner && !set.bottomPlayer.nil? %>
+                                            <% winningChars.each do |char| %>
+                                            <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                            <% end %>
                                           <% end %>
-                                        <% else %>
-                                          <% losingChars.each do |char| %>
-                                          <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                          <% if topIsWinner && !set.bottomPlayer.nil? %>
+                                            <% losingChars.each do |char| %>
+                                            <%= image_tag("characters/#{char.to_s + "-icon"}.png", alt: "#{char}", class: "bracket-charImg") %>
+                                            <% end %>
                                           <% end %>
-                                        <% end %>
-                                        <span style="" title="<%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %>"><%= botIsWinner ? set.winner.gamertag : set.loser.gamertag %></span>
+                                        <span style="" title="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
                                       </div>
                                     </div>
                                     <div class="shadow"></div>
@@ -607,14 +614,14 @@
                           <div class="set-table">
                               <div class="set-title">
                                   <div class="set-player top">
-                                    <span><%= set.topPlayer.gamertag %></span>
-                                    <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag %>" />
+                                    <span><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                    <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>" />
                                   </div>
                                   <div class="set-character">
                                   </div>
                                   <div class="set-player bot">
-                                    <span><%= set.bottomPlayer.gamertag %></span>
-                                    <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag %>" />
+                                    <span><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
+                                    <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>" />
                                     <span class="set-information-close">X</span>
                                   </div>
                               </div>
@@ -626,15 +633,15 @@
                                   <%
                                     topChar = ""
                                     botChar = ""
-                                    set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s
-                                    set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s
+                                    (set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s) if !set.topPlayer.nil?
+                                    (set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s) if !set.bottomPlayer.nil?
                                     topChar = "unknown" if topChar.empty?
                                     botChar = "unknown" if botChar.empty?
                                   %>
                                   <div class="match-row">
-                                    <div class="match-player <%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
-                                      <span class="match-playername"><%= set.topPlayer.gamertag %></span>
-                                      <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= set.topPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
+                                    <div class="match-player <%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>">
+                                      <span class="match-playername"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                      <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>" />
                                     </div>
                                     <span class="set-character left">
                                       <span class="currentChar"><%= image_tag("characters/#{topChar}.png", alt: "#{topChar}", class: "currChar charImg") if !topChar.empty? %></span>
@@ -715,7 +722,7 @@
                                     </span>
 
                                     <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
-                                      <span class="match-playername"><%= set.bottomPlayer.gamertag %></span>
+                                      <span class="match-playername"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
                                       <input type="hidden" name="bottomPlayer<%= index + 1 %>" value="<%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
                                     </div>
                                   </div>

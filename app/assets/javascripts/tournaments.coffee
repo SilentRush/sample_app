@@ -73,11 +73,10 @@ $ ->
 
   $(".set-match-container").on "click", ".match-player", ->
     parent = $(this).parent();
-    win = parent.find(".Win");
-    lose = parent.find(".Lose");
+    win = $(this);
+    lose = parent.find(".match-player");
+    lose.removeClass("Win");
+    win.removeClass("Lose");
     win.toggleClass("Win");
-    win.toggleClass("Lose");
-    lose.toggleClass("Win");
-    lose.toggleClass("Lose");
-    win.find("input").attr("value", "Lose");
-    lose.find("input").attr("value", "Win");
+    lose.find("input").attr("value", "Lose");
+    win.find("input").attr("value", "Win");

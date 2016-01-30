@@ -5,7 +5,7 @@ def createNewTournament(players, details)
   tsize = (2 ** (Math.log(size, 2).ceil))
   pseedArr = seeding(size)
   @tournament = Tournament.new
-  @tournament.name = "Testing"
+  @tournament.name = "Test 16 Players"
   @tournament.date =  "10/12/16"
   @tournament.description = "This is a test tournament"
   #@tournament.url = "http://test.test.com"
@@ -17,12 +17,12 @@ def createNewTournament(players, details)
     currPlayer = Player.create(gamertag: player, name: "", characters: "", wins: 0, loses: 0, winrate: 0) if currPlayer.nil?
     currPlayer.tournaments << @tournament
     currPlayer.save
-    pseedHash["s#{index + 1}"] = player
+    pseedHash["#{index + 1}"] = currPlayer
   end
   puts pseedHash.to_s
 
   sets = initializeSets(pseedArr, tsize, pseedHash)
-  @tournament.update(winnersRounds: sets.select{|x| x[:roundnum] > 0}.last.roundnum, losersRounds: sets.select{|x| x[:roundnum] < 0}.last.roundnum)
+  @tournament.update(winnersRounds: sets.select{|x| x[:roundnum] > 0}.last.roundnum, losersRounds: (sets.select{|x| x[:roundnum] < 0}.last.roundnum) * -1)
   updateSetTraversal(sets, tsize)
   @tournament.gamesets.each do |set|
     puts set.inspect
@@ -40,8 +40,8 @@ def initializeSets(seed, tsize, players)
     setsInRound.times do |i|
       set = Gameset.new()
       if index == 0
-        topPlayer = Player.find_by(gamertag: players["s#{seed[count]}"])
-        bottomPlayer = Player.find_by(gamertag: players["s#{seed[count+1]}"])
+        topPlayer = players["#{seed[count]}"]
+        bottomPlayer = players["#{seed[count+1]}"]
         puts topPlayer.gamertag.to_s if !topPlayer.nil?
         puts bottomPlayer.gamertag.to_s if !bottomPlayer.nil?
         set.topPlayer = topPlayer
@@ -51,6 +51,8 @@ def initializeSets(seed, tsize, players)
       set.roundnum = index + 1
       set.tournament = @tournament
       set.save
+      match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+      match.save
       setsArr.push(set)
       count += 2
     end
@@ -60,6 +62,10 @@ def initializeSets(seed, tsize, players)
   grandSetTwo = Gameset.new(setnum: 1, roundnum: winnersRounds + 2, tournament_id: @tournament.id)
   grandSetOne.save
   grandSetTwo.save
+  match1 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetOne, wchar: "", lchar: "", map: "")
+  match2 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetTwo, wchar: "", lchar: "", map: "")
+  match1.save
+  match2.save
   setsArr.push(grandSetOne)
   setsArr.push(grandSetTwo)
 
@@ -82,6 +88,8 @@ def initializeSets(seed, tsize, players)
       set.roundnum = -(index + 1)
       set.tournament = @tournament
       set.save
+      match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+      match.save
       setsArr.push(set)
     end
     if losersRounds % 2 != 0
@@ -96,6 +104,7 @@ def initializeSets(seed, tsize, players)
 end
 
 def updateSetTraversal(sets, tsize)
+  count = 1
   @tournament.winnersRounds.times do |index|
     sets.select{|x| x[:roundnum] == index + 1}.each_with_index do |set, i|
       if (index + 1) == 1
@@ -110,11 +119,11 @@ def updateSetTraversal(sets, tsize)
       else
         if (index + 1) % 2 == 0
           setsInReverse = sets.select{|x| x[:roundnum] == index + 1}.reverse
-          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), setsInReverse[i].setnum, @tournament.id).first
+          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), setsInReverse[i].setnum, @tournament.id).first
           winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
           set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
         else
-          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), set.setnum, @tournament.id).first
+          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), set.setnum, @tournament.id).first
           winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
           set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
         end
@@ -125,9 +134,9 @@ def updateSetTraversal(sets, tsize)
         set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
       end
     end
+    count += 1 if index != 0 && index != 1
   end
-  losersRounds = (@tournament.losersRounds) * -1
-  losersRounds.times do |index|
+  @tournament.losersRounds.times do |index|
     sets.select{|x| x[:roundnum] == -(index + 1)}.each_with_index do |set, i|
       if set.roundnum % 2 == 0
         winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
@@ -136,8 +145,8 @@ def updateSetTraversal(sets, tsize)
         winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 2), set.setnum, @tournament.id).first
         set.update(toWinnerSet: winnerSet) if !winnerSet.nil?
       end
-      if (index + 1) == losersRounds
-        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 1), set.setnum, @tournament.id).first
+      if (index + 1) == @tournament.losersRounds
+        winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", @tournament.winnersRounds - 1, set.setnum, @tournament.id).first
         set.update(toWinnerSet: winnerSet) if !winnerSet.nil?
       end
     end
@@ -163,6 +172,6 @@ def nextLayer(pls)
   return out
 end
 
-player = ["Movement","jmlee337", "Chroma", "A-on", "Mascolino", "Ezmar", "Ivan", "Boston's Finest"]
+player = ["1","2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17","18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32"]
 
 createNewTournament  player, "something"

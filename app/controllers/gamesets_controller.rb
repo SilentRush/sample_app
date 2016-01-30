@@ -102,10 +102,35 @@ class GamesetsController < ApplicationController
         end
         match.save
       end
+      updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds
       redirect_to tournament_path @gameset.tournament
     else
       render 'edit'
     end
+  end
+
+  def updateBracket set
+    if set.roundnum > 0
+      set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner
+      (set.setnum % 2 == 0 ? set.toLoserSet.bottomPlayer = set.loser : set.toLoserSet.topPlayer = set.loser) if set.roundnum == 1
+      set.toLoserSet.topPlayer = set.loser if set.roundnum != 1 && set.roundnum != set.tournament.winnersRounds - 1
+      if set.roundnum == set.tournament.winnersRounds - 1
+        if set.winner == set.bottomPlayer
+          set.toWinnerSet.topPlayer = set.loser
+          set.toWinnerSet.bottomPlayer = set.winner
+        else
+          set.toWinnerSet.topPlayer = nil
+          set.toLoserSet.bottomPlayer = nil
+        end
+      end
+      set.toWinnerSet.save if !set.toWinnerSet.nil?
+      set.toLoserSet.save if !set.toLoserSet.nil?
+    else
+      (set.roundnum % 2 == 0 ? (set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner) : set.toWinnerSet.bottomPlayer = set.winner) if set.roundnum > -set.tournament.losersRounds
+      (set.toWinnerSet.bottomPlayer = set.winner) if set.roundnum == -set.tournament.losersRounds
+      set.toWinnerSet.save if !set.toWinnerSet.nil?
+    end
+
   end
 
 end
