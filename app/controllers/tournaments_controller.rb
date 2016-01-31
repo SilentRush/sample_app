@@ -1,6 +1,9 @@
 require 'web_scrapper'
 class TournamentsController < ApplicationController
+
   def new
+    @tournament = Tournament.new()
+    @player = Player.all
   end
 
   def create

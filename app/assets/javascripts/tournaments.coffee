@@ -8,7 +8,9 @@ $ ->
 
   $(".clickable-set").click ->
     $('.set-information').removeClass("show");
-    $("[id=" + $(this).data("id") + "]").toggleClass("show");
+    set = $("[id=" + $(this).data("id") + "]")
+    if set.find('[name=topPlayer]').val() != "" && set.find('[name=bottomPlayer]').val() != ""
+      set.toggleClass("show");
 
   $(".set-information-close").click ->
     $('.set-information').removeClass("show");
@@ -80,3 +82,31 @@ $ ->
     win.toggleClass("Win");
     lose.find("input").attr("value", "Lose");
     win.find("input").attr("value", "Win");
+
+  $(".addPlayer").click ->
+    gamertag = $('#search')
+    id = $('[name=id]');
+    console.log(id.val());
+    console.log(gamertag.val());
+    if(id.val() != "")
+      row = document.createElement("div");
+      row.className = "player-row";
+      span = document.createElement("span");
+      delBtn = document.createElement("span");
+      delBtn.className = "delBtn glyphicon glyphicon-remove";
+      span.innerHTML = gamertag.val();
+      idInput = document.createElement("input");
+      idInput.setAttribute("name", gamertag.val());
+      idInput.type = "hidden";
+      idInput.value = id.val();
+      $(row).append(span);
+      $(row).append(idInput);
+      $(row).append(delBtn);
+      $('.player-list-table').append(row);
+      $('.player-errors').html("");
+    else
+      $('.player-errors').html(gamertag.val() + " is not a valid player!");
+      $('.player-errors').css({"color":"red"});
+
+  $(".player-container-list").on "click", ".delBtn", ->
+    $(this).parent(".player-row").remove();

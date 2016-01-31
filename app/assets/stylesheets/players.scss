@@ -1,3 +1,65 @@
 // Place all the styles related to the Players controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.playerName {
+  padding: 26px 0px 0px 100px;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: bold;
+  font-family: serif;
+}
+
+div.player-container {
+  width: 420px;
+  height: 590px;
+  box-shadow: 6px 6px 8px #B7B7B7;
+  border-radius: 23px 23px 23px 23px;
+}
+
+img.player-img {
+  padding: 16px 0px 0px 38px;
+}
+
+div.special-moves{
+  padding-top: 10px;
+  width:350px;
+  height:175px;
+  margin-top: 15px;
+  margin-left: 34px;
+  word-break: break-all;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+img.player-weakness {
+  float: left;
+  padding-top: 10px;
+  padding-left: 38px;
+}
+
+img.player-resistance {
+  float: right;
+  padding-top: 10px;
+}
+
+div.attributes {
+  width: 140px;
+  display: table-cell;
+}
+
+div.snippet {
+  padding-left: 33px;
+  width: 185px;
+  height: 42px;
+  word-break: break-all;
+  display: table-cell;
+  vertical-align: top;
+  font-size: 11px;
+  -webkit-transform: skew(-40deg);
+    -moz-transform: skew(-40deg);
+    -o-transform: skew(-40deg);
+}
+div.attr-container {
+  padding: 16px 0px 0px 42px;
+}

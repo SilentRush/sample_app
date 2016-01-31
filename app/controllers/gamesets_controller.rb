@@ -56,57 +56,60 @@ class GamesetsController < ApplicationController
     wscore = 0
     lscore = 0
 
-    params[:matchCount].to_i.times do |index|
-      tplayerScore += 1 if params["topPlayer#{index + 1}"].eql?("Win")
-      bplayerScore += 1 if params["bottomPlayer#{index + 1}"].eql?("Win")
-    end
-    if tplayerScore > bplayerScore
-      winner = Player.find_by(gamertag: params[:topPlayer])
-      loser = Player.find_by(gamertag: params[:bottomPlayer])
-      wscore = tplayerScore
-      lscore = bplayerScore
-    else
-      loser = Player.find_by(gamertag: params[:topPlayer])
-      winner = Player.find_by(gamertag: params[:bottomPlayer])
-      wscore = bplayerScore
-      lscore = tplayerScore
-    end
+    if validateSet
 
-    puts wscore
-    puts lscore
-
-    if @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
-      @gameset.gamematches.each do |match|
-        match.destroy
-      end
       params[:matchCount].to_i.times do |index|
-        matchnum = index + 1
-        wchar = ""
-        lchar = ""
-        winner = Player
-        loser = Player
-        map = params["map#{index + 1}"]
-        match = Gamematch
-        if params["topPlayer#{index + 1}"].eql?("Win")
-          wchar = params["topChar#{index + 1}"]
-          lchar = params["bottomChar#{index + 1}"]
-          winner = Player.find_by(gamertag: params[:topPlayer])
-          loser = Player.find_by(gamertag: params[:bottomPlayer])
-          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
-        else
-          wchar = params["bottomChar#{index + 1}"]
-          lchar = params["topChar#{index + 1}"]
-          winner = Player.find_by(gamertag: params[:bottomPlayer])
-          loser = Player.find_by(gamertag: params[:topPlayer])
-          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
-        end
-        match.save
+        tplayerScore += 1 if params["topPlayer#{index + 1}"].eql?("Win")
+        bplayerScore += 1 if params["bottomPlayer#{index + 1}"].eql?("Win")
       end
-      updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds
-      redirect_to tournament_path @gameset.tournament
-    else
-      render 'edit'
+      if tplayerScore > bplayerScore
+        winner = Player.find_by(gamertag: params[:topPlayer])
+        loser = Player.find_by(gamertag: params[:bottomPlayer])
+        wscore = tplayerScore
+        lscore = bplayerScore
+      else
+        loser = Player.find_by(gamertag: params[:topPlayer])
+        winner = Player.find_by(gamertag: params[:bottomPlayer])
+        wscore = bplayerScore
+        lscore = tplayerScore
+      end
+
+      puts wscore
+      puts lscore
+
+      if @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
+        @gameset.gamematches.each do |match|
+          match.destroy
+        end
+        params[:matchCount].to_i.times do |index|
+          matchnum = index + 1
+          wchar = ""
+          lchar = ""
+          winner = Player
+          loser = Player
+          map = params["map#{index + 1}"]
+          match = Gamematch
+          if params["topPlayer#{index + 1}"].eql?("Win")
+            wchar = params["topChar#{index + 1}"]
+            lchar = params["bottomChar#{index + 1}"]
+            winner = Player.find_by(gamertag: params[:topPlayer])
+            loser = Player.find_by(gamertag: params[:bottomPlayer])
+            match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          else
+            wchar = params["bottomChar#{index + 1}"]
+            lchar = params["topChar#{index + 1}"]
+            winner = Player.find_by(gamertag: params[:bottomPlayer])
+            loser = Player.find_by(gamertag: params[:topPlayer])
+            match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          end
+          match.save
+        end
+        updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds && !@gameset.tournament.isIntegration
+      else
+        render 'edit'
+      end
     end
+    redirect_to request.referer
   end
 
   def updateBracket set
@@ -131,6 +134,29 @@ class GamesetsController < ApplicationController
       set.toWinnerSet.save if !set.toWinnerSet.nil?
     end
 
+  end
+
+  def validateSet
+    top = Player.find_by(gamertag: params[:topPlayer])
+    bot = Player.find_by(gamertag: params[:bottomPlayer])
+    valid = true
+    if @gameset.tournament.id != request.referer.to_s.split('/').last.to_i
+      flash[:error] += " Set not a part of this tournament,"
+      valid = false;
+    end
+    if @gameset.nil?
+      flash[:error] += " Set not valid,"
+      valid = false
+    end
+    if @gameset.topPlayer != top || @gameset.bottomPlayer != bot
+      flash[:error] += " Id was tampered with,"
+      valid = false
+    end
+    if params[:matchCount].to_i > 7
+      flash[:error] += " Match Count greater than 7,"
+      valid = false
+    end
+    return valid
   end
 
 end

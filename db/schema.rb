@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(version: 20160111074442) do
     t.string   "url"
     t.integer  "winnersRounds"
     t.integer  "losersRounds"
+    t.boolean  "isIntegration"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
   end

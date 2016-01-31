@@ -31,6 +31,7 @@ def createTournament page
   @tournament.url = page
   @tournament.winnersRounds = 0
   @tournament.losersRounds = 0
+  @tournament.isIntegration = true
   #@tournament.date = tdate
   @parse_page.css('.bracket-content').css('.bracket-section').css('.bracket-round-heading').each do |a|
     if a.text.include?("Winners")

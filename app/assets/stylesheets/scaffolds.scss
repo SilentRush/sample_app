@@ -48,6 +48,7 @@ div {
 }
 .error{
   color: red;
+  position: absolute;
 }
 
 .field_with_errors {
@@ -82,4 +83,12 @@ div {
 }
 .linkIcons{
   height: 40px;
+}
+
+a.links {
+  color: #428BCA !important
+}
+
+a.links:hover {
+  color: #235A8A !important
 }
