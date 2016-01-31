@@ -83,6 +83,11 @@ $ ->
     lose.find("input").attr("value", "Lose");
     win.find("input").attr("value", "Win");
 
+  $("#search").on('keypress', ((e) ->
+    if e.keyCode == 13
+      $(".addPlayer").click();
+  ).bind(this))
+
   $(".addPlayer").click ->
     gamertag = $('#search')
     id = $('[name=id]');
@@ -104,6 +109,7 @@ $ ->
       $(row).append(delBtn);
       $('.player-list-table').append(row);
       $('.player-errors').html("");
+      $('#search').val("");
     else
       $('.player-errors').html(gamertag.val() + " is not a valid player!");
       $('.player-errors').css({"color":"red"});

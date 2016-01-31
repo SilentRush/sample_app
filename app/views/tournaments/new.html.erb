@@ -1,14 +1,16 @@
 <h1>Create a New Tournament</h1>
+  <%= text_field_tag :search, params[:search], class: "search-query", placeholder: "Player Lookup", type: "search", data: {autocomplete: players_autocomplete_player_gamertag_path, :id_element => '#id'} %>
+  <input type="hidden" id="id" name="id" />
+  <input type="button" class="addPlayer btn btn-sm btn-primary" value="Add Player" />
+  <input type="button" class="createPlayer btn btn-sm btn-success" value="Create Player" />
+  <span class="player-errors"></span>
 
-<%= text_field_tag :search, params[:search], class: "search-query", placeholder: "namesearch", type: "search", data: {autocomplete: players_autocomplete_player_gamertag_path, :id_element => '#id'} %>
-<input type="hidden" id="id" name="id" />
-<input type="button" class="addPlayer btn btn-sm btn-primary" value="Add Player" />
-<input type="button" class="createPlayer btn btn-sm btn-success" value="Create Player" />
-<span class="player-errors"></span>
-
+  <form>
+    <input type="submit" class="createPlayer btn btn-sm btn-success" value="Create Tournament" />
 <div id="player-container-list" class="player-container-list">
   <h4>Players:</h4>
   <div class="player-list-table">
 
   </div>
 </div>
+</form>
