@@ -89,7 +89,7 @@ $ ->
               currmapimg.src = "/assets/maps/unknown.png";
             else
               $(currmapinput).val(match.map);
-              currmapimg.src = "/assets/maps/"+ match.map +".png";
+              currmapimg.src = "/assets/maps/" + match.map + ".png";
 
             $(currmap).append(currmapimg);
             $(matchmap).append(currmap).append(currmapinput);
