@@ -32,4 +32,22 @@ class TournamentsController < ApplicationController
   def index
     @tournaments = Tournament.all
   end
+
+  def getSetData
+    @set = Gameset.find(params[:id])
+    set = @set.as_json
+    tplayer = @set.topPlayer.as_json
+    bplayer = @set.bottomPlayer.as_json
+    set["topPlayer"] = tplayer
+    set["bottomPlayer"] = bplayer
+    matches = []
+    @set.gamematches.each do |match|
+      matches.push match.as_json
+    end
+    set["matches"] = matches
+
+    respond_to do |format|
+      format.json { render json: set, status: :created }
+    end
+  end
 end

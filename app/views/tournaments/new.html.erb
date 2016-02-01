@@ -5,12 +5,18 @@
   <input type="button" class="createPlayer btn btn-sm btn-success" value="Create Player" />
   <span class="player-errors"></span>
 
-  <form>
     <input type="submit" class="createPlayer btn btn-sm btn-success" value="Create Tournament" />
-<div id="player-container-list" class="player-container-list">
-  <h4>Players:</h4>
-  <div class="player-list-table">
+    <div class="create-player">
+        <div id="player-errors"></div>
+        <label for="player[gamertag]">Gamertag:</label>
+        <input id="player_gamertag" name="player[gamertag]" type="text" />
+        <input id="createPlayer" type="button" value="create" class="btn btn-sm btn-success" />
+    </div>
+    <div id="player-container-list" class="player-container-list">
+      <h4>Players:</h4>
+      <ul id="sortable" class="player-list-table">
 
-  </div>
+      </ul>
+    </div>
+<div id="results">
 </div>
-</form>

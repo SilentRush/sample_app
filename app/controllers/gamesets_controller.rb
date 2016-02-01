@@ -145,18 +145,32 @@ class GamesetsController < ApplicationController
       valid = false;
     end
     if @gameset.nil?
-      flash[:error] += " Set not valid,"
+      flash[:error] = " Set not valid,"
       valid = false
     end
     if @gameset.topPlayer != top || @gameset.bottomPlayer != bot
-      flash[:error] += " Id was tampered with,"
+      flash[:error] = " Id was tampered with,"
       valid = false
     end
     if params[:matchCount].to_i > 7
-      flash[:error] += " Match Count greater than 7,"
+      flash[:error] = " Match Count greater than 7,"
+      valid = false
+    end
+    if params[:matchCount].to_i < 1
+      flash[:error] = " Match Count less than 1,"
+      valid = false
+    end
+    if !params[:matchCount].is_i?
+      flash[:error] = " Match Count is not a number,"
       valid = false
     end
     return valid
   end
 
+end
+
+class String
+    def is_i?
+       /\A[-+]?\d+\z/ === self
+    end
 end
