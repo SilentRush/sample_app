@@ -80,7 +80,7 @@ $ ->
             maps = getmaplist();
             matchmap.className = "match-map";
             currmap.className = "currentMap";
-            currmapimg.className = "currMap charImg";
+            currmapimg.className = "currMap";
             currmapinput.type = "hidden";
 
             currmapinput.setAttribute("name","map" + match.matchnum);
@@ -105,7 +105,7 @@ $ ->
             chars = getcharlist();
             matchcharacter.className = "set-character left";
             currcharacter.className = "currentChar";
-            currcharimg.className = "currChar charImg";
+            currcharimg.className = "currChar";
             matchplayerspan.className = "match-playername";
             matchplayerinput.type = "hidden";
             matchplayerinput.setAttribute("name", "topPlayer" + match.matchnum);
@@ -144,18 +144,11 @@ $ ->
             currcharacter = document.createElement("span");
             currcharimg = document.createElement("img");
             currcharinput = document.createElement("input");
-            charlist = document.createElement("div");
             currcharinput.type = "hidden";
-            charlist.className = "char-list";
             chars = getcharlist();
-            $(chars).each (index, char) ->
-              img = document.createElement("img");
-              img.className = "selectedChar charImg";
-              img.src = "/assets/characters/" + char + ".png";
-              $(charlist).append(img);
             matchcharacter.className = "set-character right";
             currcharacter.className = "currentChar";
-            currcharimg.className = "currChar charImg";
+            currcharimg.className = "currChar";
             matchplayerspan.className = "match-playername";
             matchplayerinput.type = "hidden";
             matchplayerinput.setAttribute("name", "bottomPlayer" + match.matchnum);
