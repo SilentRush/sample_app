@@ -1,4 +1,3 @@
-<script src="/assets/dragscroll.js"></script>
   <% flash.each do |key, value| %>
     <div class="flash <%= key %>"><%= value %></div>
   <% end %>
@@ -13,8 +12,8 @@
 
   <div class="tab-content">
     <div id="bracket" class="tab active">
-      <div class="dragscroll horizontal bracket-container">
-
+      <div class="bracket-container">
+        <div class="winners-container">
           <table class="bracket-winners">
             <thead>
               <% @tournament.winnersRounds.times do |i| %>
@@ -105,7 +104,7 @@
                     <% else %>
                     <% ran = Random.new()
                         rannum = ran.rand(56347456) %>
-                    <div class="clickable-set" data-id="<%= set.id %>">
+                    <div class="clickable-set" data-id="set<%= set.roundnum + index + rannum %>">
                         <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
                           <tbody>
                             <tr>
@@ -235,6 +234,145 @@
                         </table>
                     </div>
 
+                    <div id="set<%=  set.roundnum + index + rannum %>" class="set-information">
+                      <%= form_tag("/gamesets/update/#{set.id}", method: "post") do %>
+                      <div class="set-table">
+                          <div class="set-title">
+                              <div class="set-player top">
+                                <span><%= link_to(set.topPlayer.gamertag, player_path(set.topPlayer.id), class: "links") if !set.topPlayer.nil? %></span>
+                                <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>" />
+                              </div>
+                              <div class="set-character">
+                              </div>
+                              <div class="set-player bot">
+                                <span><%= link_to(set.bottomPlayer.gamertag, player_path(set.bottomPlayer.id), class: "links") if !set.bottomPlayer.nil? %></span>
+                                <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>" />
+                                <span class="set-information-close">X</span>
+                              </div>
+                          </div>
+                        </div>
+                            <div class="set-date"><%= Time.new %>
+                            </div>
+                        <div class="set-match-container">
+                        <% set.gamematches.each_with_index do |match, index| %>
+                              <%
+                                topChar = ""
+                                botChar = ""
+                                (set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s) if !set.topPlayer.nil?
+                                (set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s) if !set.bottomPlayer.nil?
+                                topChar = "unknown" if topChar.empty?
+                                botChar = "unknown" if botChar.empty?
+                              %>
+                              <div class="match-row">
+                                <div class="match-player <%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>">
+                                  <span class="match-playername"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                  <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>" />
+                                </div>
+                                <span class="set-character left">
+                                  <span class="currentChar"><%= image_tag("characters/#{topChar}.png", alt: "#{topChar}", class: "currChar charImg") if !topChar.empty? %></span>
+                                  <input type="hidden" name="topChar<%= index + 1 %>" value="<%= topChar %>" />
+                                  <div class="char-list">
+                                    <%= image_tag("characters/bowser.png", alt: "bowser", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/captainfalcon.png", alt: "captainfalcon", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/dk.png", alt: "dk", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/drmario.png", alt: "drmario", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/falco.png", alt: "falco", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/fox.png", alt: "fox", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/ganondorf.png", alt: "ganondorf", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/iceclimbers.png", alt: "iceclimbers", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/jigglypuff.png", alt: "jigglypuff", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/kirby.png", alt: "kirby", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/link.png", alt: "link", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/luigi.png", alt: "luigi", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mario.png", alt: "mario", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/marth.png", alt: "marth", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mewtwo.png", alt: "mewtwo", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mrgamewatch.png", alt: "mrgamewatch", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/ness.png", alt: "ness", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/peach.png", alt: "peach", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/pichu.png", alt: "pichu", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/pikachu.png", alt: "pikachu", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/roy.png", alt: "roy", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/samus.png", alt: "samus", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/sheik.png", alt: "sheik", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/yoshi.png", alt: "yoshi", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/younglink.png", alt: "younglink", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/zelda.png", alt: "zelda", class: "selectedChar charImg") %>
+                                  </div>
+                                </span>
+                                <div class="match-map">
+                                  <% match.map.empty? ? map = "unknown" : map = match.map %>
+                                  <span class="currentMap"><%= image_tag("maps/#{map}.png", alt: "#{map}", class: "currMap charImg") if !map.empty? %></span>
+                                  <input type="hidden" name="map<%= index + 1 %>" value="<%= map %>" />
+                                  <div class="map-list">
+                                    <%= image_tag("maps/battlefield.png", alt: "battlefield", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/dreamland.png", alt: "dreamland", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/finaldestination.png", alt: "finaldestination", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/fountainofdreams.png", alt: "fountainofdreams", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/pokemonstadium.png", alt: "pokemonstadium", class: "selectedMap charImg") %>
+                                    <%= image_tag("maps/yoshistory.png", alt: "yoshistory", class: "selectedMap charImg") %>
+                                  </div>
+                                </div>
+                                <span class="set-character right">
+                                  <span class="currentChar"><%= image_tag("characters/#{botChar}.png", alt: "#{botChar}", class: "currChar charImg") if !botChar.empty? %></span>
+                                  <input type="hidden" name="bottomChar<%= index + 1 %>" value="<%= botChar %>" />
+                                  <div class="char-list">
+                                    <%= image_tag("characters/bowser.png", alt: "bowser", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/captainfalcon.png", alt: "captainfalcon", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/dk.png", alt: "dk", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/drmario.png", alt: "drmario", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/falco.png", alt: "falco", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/fox.png", alt: "fox", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/ganondorf.png", alt: "ganondorf", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/iceclimbers.png", alt: "iceclimbers", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/jigglypuff.png", alt: "jigglypuff", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/kirby.png", alt: "kirby", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/link.png", alt: "link", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/luigi.png", alt: "luigi", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mario.png", alt: "mario", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/marth.png", alt: "marth", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mewtwo.png", alt: "mewtwo", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/mrgamewatch.png", alt: "mrgamewatch", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/ness.png", alt: "ness", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/peach.png", alt: "peach", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/pichu.png", alt: "pichu", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/pikachu.png", alt: "pikachu", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/roy.png", alt: "roy", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/samus.png", alt: "samus", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/sheik.png", alt: "sheik", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/yoshi.png", alt: "yoshi", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/younglink.png", alt: "younglink", class: "selectedChar charImg") %>
+                                    <%= image_tag("characters/zelda.png", alt: "zelda", class: "selectedChar charImg") %>
+                                  </div>
+                                </span>
+
+                                <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
+                                  <span class="match-playername"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
+                                  <input type="hidden" name="bottomPlayer<%= index + 1 %>" value="<%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
+                                </div>
+                              </div>
+                        <% end %>
+
+                      </div>
+                      <div class="set-footer">
+                        <div class="set-url">
+                          <div class="set-url">
+                            <%= link_to image_tag("youtube.png", alt: "SilentRush Youtube", class: "linkIcons"),
+                                        'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
+                            <span class="set-info-editbtn">
+                              <input type="hidden" name="matchCount" value="<%= set.gamematches.size %>" />
+                              <%= submit_tag("Update", class: "btn btn-sm btn-primary") %>
+                            </span>
+                          </div>
+                        </div>
+                        <div class="match-plus-minus">
+                          <input type="button" class="plus btn btn-sm btn-primary" value="+" />
+                          <input type="button" class="minus btn btn-sm btn-danger" value="-"  />
+                        </div>
+                      </div>
+                      <% end %>
+                    </div>
+
                     <% end %>
 
                       <% if index + 1 < sets.size %>
@@ -251,8 +389,8 @@
                 <% end %>
             </tbody>
           </table>
-
-
+        </div>
+        <div class="losers-container">
           <table class="bracket-losers">
             <thead>
               <% @tournament.losersRounds.times do |i| %>
@@ -346,7 +484,7 @@
                     <% ran = Random.new()
                         rannum = ran.rand(734500530) %>
 
-                        <div class="clickable-set" data-id="<%= set.id %>">
+                        <div class="clickable-set" data-id="set<%= set.roundnum + index + rannum %>">
                             <table border="0" cellpadding="0" cellspacing="0" class="match_table match_qtip match-tipsy admin_editable pid34398004 pid34398092" id="match_qtip_51831678">
                               <tbody>
                                 <tr>
@@ -475,6 +613,145 @@
                             </table>
                         </div>
 
+                        <div id="set<%=  set.roundnum + index + rannum %>" class="set-information">
+                          <%= form_tag("/gamesets/update/#{set.id}", method: "post") do %>
+                          <div class="set-table">
+                              <div class="set-title">
+                                <div class="set-player top">
+                                  <span><%= link_to(set.topPlayer.gamertag, player_path(set.topPlayer.id), class: "links") if !set.topPlayer.nil? %></span>
+                                  <input type="hidden" name="topPlayer" value="<%= set.topPlayer.gamertag if !set.topPlayer.nil? %>" />
+                                </div>
+                                <div class="set-character">
+                                </div>
+                                <div class="set-player bot">
+                                  <span><%= link_to(set.bottomPlayer.gamertag, player_path(set.bottomPlayer.id), class: "links") if !set.bottomPlayer.nil? %></span>
+                                  <input type="hidden" name="bottomPlayer" value="<%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %>" />
+                                  <span class="set-information-close">X</span>
+                                </div>
+                              </div>
+                            </div>
+                                <div class="set-date"><%= Time.new %>
+                                </div>
+                            <div class="set-match-container">
+                            <% set.gamematches.each_with_index do |match, index| %>
+                                  <%
+                                    topChar = ""
+                                    botChar = ""
+                                    (set.topPlayer.eql?(match.winner) ? topChar = match.wchar.split(',').first.to_s : topChar = match.lchar.split(',').first.to_s) if !set.topPlayer.nil?
+                                    (set.bottomPlayer.eql?(match.winner) ? botChar = match.wchar.split(',').first.to_s : botChar = match.lchar.split(',').first.to_s) if !set.bottomPlayer.nil?
+                                    topChar = "unknown" if topChar.empty?
+                                    botChar = "unknown" if botChar.empty?
+                                  %>
+                                  <div class="match-row">
+                                    <div class="match-player <%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>">
+                                      <span class="match-playername"><%= set.topPlayer.gamertag if !set.topPlayer.nil? %></span>
+                                      <input type="hidden" name="topPlayer<%= index + 1 %>" value="<%= (set.topPlayer.eql?(match.winner) ? "Win" : "Lose") if !set.topPlayer.nil? %>" />
+                                    </div>
+                                    <span class="set-character left">
+                                      <span class="currentChar"><%= image_tag("characters/#{topChar}.png", alt: "#{topChar}", class: "currChar charImg") if !topChar.empty? %></span>
+                                      <input type="hidden" name="topChar<%= index + 1 %>" value="<%= topChar %>" />
+                                      <div class="char-list">
+                                        <%= image_tag("characters/bowser.png", alt: "bowser", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/captainfalcon.png", alt: "captainfalcon", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/dk.png", alt: "dk", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/drmario.png", alt: "drmario", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/falco.png", alt: "falco", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/fox.png", alt: "fox", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/ganondorf.png", alt: "ganondorf", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/iceclimbers.png", alt: "iceclimbers", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/jigglypuff.png", alt: "jigglypuff", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/kirby.png", alt: "kirby", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/link.png", alt: "link", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/luigi.png", alt: "luigi", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mario.png", alt: "mario", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/marth.png", alt: "marth", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mewtwo.png", alt: "mewtwo", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mrgamewatch.png", alt: "mrgamewatch", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/ness.png", alt: "ness", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/peach.png", alt: "peach", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/pichu.png", alt: "pichu", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/pikachu.png", alt: "pikachu", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/roy.png", alt: "roy", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/samus.png", alt: "samus", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/sheik.png", alt: "sheik", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/yoshi.png", alt: "yoshi", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/younglink.png", alt: "younglink", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/zelda.png", alt: "zelda", class: "selectedChar charImg") %>
+                                      </div>
+                                    </span>
+                                    <div class="match-map">
+                                      <% match.map.empty? ? map = "unknown" : map = match.map %>
+                                      <span class="currentMap"><%= image_tag("maps/#{map}.png", alt: "#{map}", class: "currMap charImg") if !map.empty? %></span>
+                                      <input type="hidden" name="map<%= index + 1 %>" value="<%= map %>" />
+                                      <div class="map-list">
+                                        <%= image_tag("maps/battlefield.png", alt: "battlefield", class: "selectedMap charImg") %>
+                                        <%= image_tag("maps/dreamland.png", alt: "dreamland", class: "selectedMap charImg") %>
+                                        <%= image_tag("maps/finaldestination.png", alt: "finaldestination", class: "selectedMap charImg") %>
+                                        <%= image_tag("maps/fountainofdreams.png", alt: "fountainofdreams", class: "selectedMap charImg") %>
+                                        <%= image_tag("maps/pokemonstadium.png", alt: "pokemonstadium", class: "selectedMap charImg") %>
+                                        <%= image_tag("maps/yoshistory.png", alt: "yoshistory", class: "selectedMap charImg") %>
+                                      </div>
+                                    </div>
+                                    <span class="set-character right">
+                                      <span class="currentChar"><%= image_tag("characters/#{botChar}.png", alt: "#{botChar}", class: "currChar charImg") if !botChar.empty? %></span>
+                                      <input type="hidden" name="bottomChar<%= index + 1 %>" value="<%= botChar %>" />
+                                      <div class="char-list">
+                                        <%= image_tag("characters/bowser.png", alt: "bowser", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/captainfalcon.png", alt: "captainfalcon", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/dk.png", alt: "dk", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/drmario.png", alt: "drmario", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/falco.png", alt: "falco", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/fox.png", alt: "fox", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/ganondorf.png", alt: "ganondorf", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/iceclimbers.png", alt: "iceclimbers", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/jigglypuff.png", alt: "jigglypuff", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/kirby.png", alt: "kirby", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/link.png", alt: "link", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/luigi.png", alt: "luigi", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mario.png", alt: "mario", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/marth.png", alt: "marth", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mewtwo.png", alt: "mewtwo", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/mrgamewatch.png", alt: "mrgamewatch", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/ness.png", alt: "ness", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/peach.png", alt: "peach", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/pichu.png", alt: "pichu", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/pikachu.png", alt: "pikachu", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/roy.png", alt: "roy", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/samus.png", alt: "samus", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/sheik.png", alt: "sheik", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/yoshi.png", alt: "yoshi", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/younglink.png", alt: "younglink", class: "selectedChar charImg") %>
+                                        <%= image_tag("characters/zelda.png", alt: "zelda", class: "selectedChar charImg") %>
+                                      </div>
+                                    </span>
+
+                                    <div class="match-player <%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>">
+                                      <span class="match-playername"><%= set.bottomPlayer.gamertag if !set.bottomPlayer.nil? %></span>
+                                      <input type="hidden" name="bottomPlayer<%= index + 1 %>" value="<%= set.bottomPlayer.eql?(match.winner) ? "Win" : "Lose" %>" />
+                                    </div>
+                                  </div>
+                            <% end %>
+
+                          </div>
+                          <div class="set-footer">
+                            <div class="set-url">
+                              <div class="set-url">
+                                <%= link_to image_tag("youtube.png", alt: "SilentRush Youtube", class: "linkIcons"),
+                                            'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
+                                <span class="set-info-editbtn">
+                                  <input type="hidden" name="matchCount" value="<%= set.gamematches.size %>" />
+                                  <%= submit_tag("Update", class: "btn btn-sm btn-primary") %>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="match-plus-minus">
+                              <input type="button" class="plus btn btn-sm btn-primary" value="+" />
+                              <input type="button" class="minus btn btn-sm btn-danger" value="-"  />
+                            </div>
+                          </div>
+                          <% end %>
+                        </div>
+
                     <% end %>
 
                     <% if index + 1 < sets.size %>
@@ -492,87 +769,7 @@
                 <% end %>
             </tbody>
           </table>
-
         </div>
-
-        <div id="" class="set-information">
-          <%= form_tag("/gamesets/update/", method: "post") do %>
-          <div class="set-table">
-              <div class="set-title">
-                  <div class="set-player top">
-                    <span></span>
-                    <input type="hidden" name="topPlayer" value="" />
-                  </div>
-                  <div class="set-character">
-                  </div>
-                  <div class="set-player bot">
-                    <span></span>
-                    <input type="hidden" name="bottomPlayer" value="" />
-                    <span class="set-information-close">X</span>
-                  </div>
-              </div>
-            </div>
-                <div class="set-date">
-                </div>
-            <div class="set-match-container">
-            </div>
-            <div class="char-list">
-              <%= image_tag("characters/bowser.png", alt: "bowser", class: "selectedChar") %>
-              <%= image_tag("characters/captainfalcon.png", alt: "captainfalcon", class: "selectedChar") %>
-              <%= image_tag("characters/dk.png", alt: "dk", class: "selectedChar") %>
-              <%= image_tag("characters/drmario.png", alt: "drmario", class: "selectedChar") %>
-              <%= image_tag("characters/falco.png", alt: "falco", class: "selectedChar") %>
-              <%= image_tag("characters/fox.png", alt: "fox", class: "selectedChar") %>
-              <%= image_tag("characters/ganondorf.png", alt: "ganondorf", class: "selectedChar") %>
-              <%= image_tag("characters/iceclimbers.png", alt: "iceclimbers", class: "selectedChar") %>
-              <%= image_tag("characters/jigglypuff.png", alt: "jigglypuff", class: "selectedChar") %>
-              <%= image_tag("characters/kirby.png", alt: "kirby", class: "selectedChar") %>
-              <%= image_tag("characters/link.png", alt: "link", class: "selectedChar") %>
-              <%= image_tag("characters/luigi.png", alt: "luigi", class: "selectedChar") %>
-              <%= image_tag("characters/mario.png", alt: "mario", class: "selectedChar") %>
-              <%= image_tag("characters/marth.png", alt: "marth", class: "selectedChar") %>
-              <%= image_tag("characters/mewtwo.png", alt: "mewtwo", class: "selectedChar") %>
-              <%= image_tag("characters/mrgamewatch.png", alt: "mrgamewatch", class: "selectedChar") %>
-              <%= image_tag("characters/ness.png", alt: "ness", class: "selectedChar") %>
-              <%= image_tag("characters/peach.png", alt: "peach", class: "selectedChar") %>
-              <%= image_tag("characters/pichu.png", alt: "pichu", class: "selectedChar") %>
-              <%= image_tag("characters/pikachu.png", alt: "pikachu", class: "selectedChar") %>
-              <%= image_tag("characters/roy.png", alt: "roy", class: "selectedChar") %>
-              <%= image_tag("characters/samus.png", alt: "samus", class: "selectedChar") %>
-              <%= image_tag("characters/sheik.png", alt: "sheik", class: "selectedChar") %>
-              <%= image_tag("characters/yoshi.png", alt: "yoshi", class: "selectedChar") %>
-              <%= image_tag("characters/younglink.png", alt: "younglink", class: "selectedChar") %>
-              <%= image_tag("characters/zelda.png", alt: "zelda", class: "selectedChar") %>
-              <%= image_tag("characters/unknown.png", alt: "unknown", class: "selectedChar") %>
-            </div>
-            <div class="map-list">
-              <%= image_tag("maps/battlefield.png", alt: "battlefield", class: "selectedMap") %>
-              <%= image_tag("maps/dreamland.png", alt: "dreamland", class: "selectedMap") %>
-              <%= image_tag("maps/finaldestination.png", alt: "finaldestination", class: "selectedMap") %>
-              <%= image_tag("maps/fountainofdreams.png", alt: "fountainofdreams", class: "selectedMap") %>
-              <%= image_tag("maps/pokemonstadium.png", alt: "pokemonstadium", class: "selectedMap") %>
-              <%= image_tag("maps/yoshistory.png", alt: "yoshistory", class: "selectedMap") %>
-            </div>
-            <div class="set-footer">
-              <div class="set-url">
-                <div class="set-url">
-                  <%= link_to image_tag("youtube.png", alt: "SilentRush Youtube", class: "linkIcons"),
-                              'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
-                  <span class="set-info-editbtn">
-                    <input type="hidden" name="matchCount" value="" />
-                    <%= submit_tag("Update", class: "btn btn-sm btn-primary") %>
-                  </span>
-                </div>
-              </div>
-              <div class="match-plus-minus">
-                <input type="button" class="plus btn btn-sm btn-primary" value="+" />
-                <input type="button" class="minus btn btn-sm btn-danger" value="-"  />
-              </div>
-            </div>
-          <% end %>
-        </div>
-
-        <div id="results">
         </div>
 
       </div>
