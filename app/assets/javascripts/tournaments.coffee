@@ -231,8 +231,8 @@ $ ->
     parent.find("[name=matchCount]").attr("value", id);
 
   $(".set-match-container").on "click", ".currentMap", ->
-    $(".map-list").css("margin-top",-($(".map-list").height()/2));
     $(".map-list").show();
+    $(".map-list").css("margin-top",-($(".map-list").height()/2));
     tournamentVars.ele = this;
 
   $(".set-information").on "click", ".selectedMap", ->
