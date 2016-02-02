@@ -1246,4 +1246,13 @@ span.seed {
     cursor: pointer;
     width: 127.5px;
   }
+  span.set-information-close {
+    float:right;
+    padding-right:5px;
+    color: rgba(220, 14, 14, 0.88);
+    font-size: 24px;
+    cursor: pointer;
+    font-weight: bolder;
+    margin-top: -2px;
+  }
 }

@@ -80,7 +80,7 @@ $ ->
             currmapimg.className = "currMap";
             currmapinput.type = "hidden";
 
-            currmapinput.setAttribute("name","map" + match.matchnum);
+            currmapinput.setAttribute("name","matches[][map]");
             if $.inArray(match.map, maps) == -1
               $(currmapinput).val("unknown");
               currmapimg.src = "/assets/maps/unknown.png";
@@ -105,8 +105,8 @@ $ ->
             currcharimg.className = "currChar";
             matchplayerspan.className = "match-playername";
             matchplayerinput.type = "hidden";
-            matchplayerinput.setAttribute("name", "topPlayer" + match.matchnum);
-            currcharinput.setAttribute("name", "topChar" + match.matchnum);
+            matchplayerinput.setAttribute("name", "matches[][topPlayer]");
+            currcharinput.setAttribute("name", "matches[][topChar]");
             if match.winner_id == data.topPlayer_id
               matchplayer.className = "match-player Win";
               $(matchplayerinput).val("Win");
@@ -148,8 +148,8 @@ $ ->
             currcharimg.className = "currChar";
             matchplayerspan.className = "match-playername";
             matchplayerinput.type = "hidden";
-            matchplayerinput.setAttribute("name", "bottomPlayer" + match.matchnum);
-            currcharinput.setAttribute("name", "bottomChar" + match.matchnum);
+            matchplayerinput.setAttribute("name", "matches[][bottomPlayer]");
+            currcharinput.setAttribute("name", "matches[][bottomChar]");
             if match.winner_id == data.bottomPlayer_id
               matchplayer.className = "match-player Win";
               $(matchplayerinput).val("Win");
@@ -213,11 +213,6 @@ $ ->
     if(id < 8)
       div.append(html);
       newRow = div.find(".match-row").last();
-      newRow.find(".match-player").first().find("input").attr("name","topPlayer" + id);
-      newRow.find(".match-player").last().find("input").attr("name","bottomPlayer" + id);
-      newRow.find(".set-character").first().find("input").attr("name","topChar" + id);
-      newRow.find(".set-character").last().find("input").attr("name","bottomChar" + id);
-      newRow.find(".match-map").first().find("input").attr("name","map" + id);
       parent.find("[name=matchCount]").attr("value", id);
 
   $(".minus").click ->
