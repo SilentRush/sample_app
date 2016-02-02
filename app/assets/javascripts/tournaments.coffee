@@ -52,15 +52,12 @@ $ ->
     $('.create-player').toggle();
 
   loadSetInformation = (ele) ->
-    console.log(ele);
     $.ajax
       url: "/tournaments/getSetData"
       type: "POST"
       data:
         id: $(ele).data("id");
       success: (data, status, response) ->
-        console.log(data);
-        $('#results').html(JSON.stringify(data));
         if data.topPlayer_id != null && data.bottomPlayer_id != null
           box = $('.set-information');
           box.find("[name=matchCount]").val(data.matches.length);
@@ -181,6 +178,7 @@ $ ->
             $('.set-match-container').append(matchrow);
 
           box.toggleClass("show");
+          box.css("margin-top",-(box.height()/2));
       error: ->
         $('#results').html("ERROR");
 
@@ -233,6 +231,7 @@ $ ->
     parent.find("[name=matchCount]").attr("value", id);
 
   $(".set-match-container").on "click", ".currentMap", ->
+    $(".map-list").css("margin-top",-($(".map-list").height()/2));
     $(".map-list").show();
     tournamentVars.ele = this;
 
@@ -247,6 +246,7 @@ $ ->
 
   $(".set-match-container").on "click", ".currentChar", ->
     $(".char-list").show();
+    $(".char-list").css("margin-top",-($(".char-list").height()/2));
     tournamentVars.ele = this;
 
   $(".set-information").on "click", ".selectedChar", ->
