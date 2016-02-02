@@ -907,6 +907,7 @@ div.matchContainer:hover {
 div.set-table {
   display: table;
   text-align: center;
+  width: 100%;
 }
 
 div.set-title {
@@ -962,7 +963,7 @@ div.match-player.Win{
   font-weight: bold;
 }
 div.match-player{
-  width: 160px;
+  width: 220px;
   font-size: 16px;
   cursor: pointer;
 }
@@ -1209,15 +1210,20 @@ span.seed {
   div.set-player.top {
     padding-right: 5px;
     text-align:right;
-    width:187.5px;
+    width:50%;
     display: table-cell;
   }
 
   div.set-player.bot {
     padding-left: 5px;
     text-align:left;
-    width:187.5px;
+    width:50%;
     display: table-cell;
+  }
+  div.set-player {
+    padding: 5px 0px 5px 0px;
+    font-weight: bold;
+    font-size: 16px;
   }
   img.selectedMap {
     cursor: pointer;
@@ -1228,5 +1234,16 @@ span.seed {
     cursor: pointer;
     width: 60px !important;
     padding: 3px 2px 2px 3px;
+  }
+  img.currMap {
+    width:40px;
+  }
+  img.currChar {
+    width: 40px;
+  }
+  div.match-player{
+    font-size: 13px;
+    cursor: pointer;
+    width: 127.5px;
   }
 }
