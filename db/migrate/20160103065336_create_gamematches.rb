@@ -4,8 +4,8 @@ class CreateGamematches < ActiveRecord::Migration
       t.integer :matchnum
       t.string :wchar
       t.string :lchar
-      t.string :winner_id
-      t.string :loser_id
+      t.integer :winner_id
+      t.integer :loser_id
       t.string :map
       t.boolean :invalidMatch
       t.references :gameset, index: true, foreign_key: true
