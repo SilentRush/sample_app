@@ -622,7 +622,7 @@
                   </td>
                     <% @wins = 0
                            @loses = 0
-                          Gameset.where("tournament_id = ? AND (winner_id = ? OR loser_id = ?)", @tournament.id, player.id, player.id).each do |set|
+                          Gameset.where("tournament_id = ? AND (winner_id = ? OR loser_id = ?)", @tournament.id.to_s, player.id.to_s, player.id.to_s).each do |set|
                             if player == set.winner
                               @wins += set.wscore.to_i
                               @loses += set.lscore
