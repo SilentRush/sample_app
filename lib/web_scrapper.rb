@@ -13,7 +13,7 @@ def getPlayers page
   return playersToTournament
 end
 
-def createTournament page
+def importTournament page
   @page = HTTParty.get(page)
   @parse_page = Nokogiri::HTML(@page)
   #create @tournament

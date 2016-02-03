@@ -1,22 +1,27 @@
+<% flash.each do |key, value| %>
+  <div class="flash <%= key %>"><%= value %></div>
+<% end %>
 <h1>Create a New Tournament</h1>
-  <%= text_field_tag :search, params[:search], class: "search-query", placeholder: "Player Lookup", type: "search", data: {autocomplete: players_autocomplete_player_gamertag_path, :id_element => '#id'} %>
+  <%= text_field_tag :search, params[:search], class: "search-query", placeholder: "Player Lookup", type: "search", "min-length" => 1, data: {autocomplete: players_autocomplete_player_gamertag_path, :id_element => '#id'} %>
   <input type="hidden" id="id" name="id" />
   <input type="button" class="addPlayer btn btn-sm btn-primary" value="Add Player" />
   <input type="button" class="createPlayer btn btn-sm btn-success" value="Create Player" />
   <span class="player-errors"></span>
 
-    <input type="submit" class="createPlayer btn btn-sm btn-success" value="Create Tournament" />
     <div class="create-player">
         <div id="player-errors"></div>
         <label for="player[gamertag]">Gamertag:</label>
         <input id="player_gamertag" name="player[gamertag]" type="text" />
         <input id="createPlayer" type="button" value="create" class="btn btn-sm btn-success" />
     </div>
+    <%= form_tag(tournaments_createNewTournament_path, method: "post") do %>
     <div id="player-container-list" class="player-container-list">
       <h4>Players:</h4>
       <ul id="sortable" class="player-list-table">
 
       </ul>
     </div>
+    <input type="submit" class="createPlayer btn btn-sm btn-success" value="Create Tournament" />
+    <% end %>
 <div id="results">
 </div>

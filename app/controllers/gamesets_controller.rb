@@ -1,4 +1,5 @@
 class GamesetsController < ApplicationController
+  include GamesetsHelper
   def new
 
   end
@@ -61,9 +62,12 @@ class GamesetsController < ApplicationController
 
     if validateSet
 
+      puts "DATA:"
       params[:matches].each do |match|
         tplayerScore += 1 if match[:topPlayer].eql?("Win")
         bplayerScore += 1 if match[:bottomPlayer].eql?("Win")
+        puts match[:topPlayer]
+        puts match[:bottomPlayer]
       end
       if tplayerScore > bplayerScore
         winner = Player.find_by(gamertag: params[:topPlayer])
@@ -79,6 +83,9 @@ class GamesetsController < ApplicationController
         valid = false
         flash[:error] = "Winner could not be determined."
       end
+      puts "DATA:"
+      puts tplayerScore
+      puts bplayerScore
 
       if @gameset.winner != winner && @gameset.tournament.isIntegration
         valid = false
@@ -87,6 +94,7 @@ class GamesetsController < ApplicationController
 
     if valid
       @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
+      puts @gameset.inspect
       @gameset.gamematches.each do |match|
         match.destroy
       end
@@ -134,8 +142,8 @@ class GamesetsController < ApplicationController
           set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner
           set.toLoserSet.bottomPlayer = set.loser
         else
-          set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner
-          set.toLoserSet.topPlayer = set.loser
+          set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner if set.roundnum < set.tournament.winnersRounds - 1
+          set.toLoserSet.topPlayer = set.loser if set.roundnum < set.tournament.winnersRounds - 1
         end
         if set.roundnum == set.tournament.winnersRounds - 1
           if set.winner == set.bottomPlayer
@@ -153,6 +161,7 @@ class GamesetsController < ApplicationController
         (set.toWinnerSet.bottomPlayer = set.winner) if set.roundnum == -set.tournament.losersRounds
         set.toWinnerSet.save if !set.toWinnerSet.nil?
       end
+      updateByes set.toLoserSet if set.roundnum == 2
     else
       if set.roundnum > 0
         set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.winner : set.toWinnerSet.topPlayer = set.winner
@@ -174,8 +183,8 @@ class GamesetsController < ApplicationController
         (set.toWinnerSet.bottomPlayer = set.winner) if set.roundnum == -set.tournament.losersRounds
         set.toWinnerSet.save if !set.toWinnerSet.nil?
       end
+      updateByes set.toLoserSet if set.roundnum == 1
     end
-
   end
 
   def validateSet

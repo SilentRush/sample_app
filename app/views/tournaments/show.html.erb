@@ -1,4 +1,3 @@
-<script src="/assets/dragscroll.js"></script>
   <% flash.each do |key, value| %>
     <div class="flash <%= key %>"><%= value %></div>
   <% end %>
@@ -100,7 +99,10 @@
                         <% end %>
                         <% firstTime = false %>
 
-                    <% if 1 == 2 %>
+                    <%
+                    bye = Player.find_by(gamertag: "bye")
+                    if set.topPlayer == bye || set.bottomPlayer == bye
+                       %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
                     <% ran = Random.new()
@@ -339,7 +341,10 @@
                     <% end %>
                     <% firstTime = false %>
 
-                    <% if 1 == 2 %>
+                    <%
+                    bye = Player.find_by(gamertag: "bye")
+                    if set.topPlayer == bye || set.bottomPlayer == bye
+                       %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
 
@@ -575,7 +580,7 @@
         <div id="results">
         </div>
 
-      </div>
+    </div>
 
 
 
@@ -617,9 +622,8 @@
                   </td>
                     <% @wins = 0
                            @loses = 0
-                          player.gamesets.where(tournament_id: @tournament.id).each do |set|
+                          Gameset.where("tournament_id = ? AND (winner_id = ? OR loser_id = ?)", @tournament.id, player.id, player.id).each do |set|
                             if player == set.winner
-                              puts @wins.to_s + set.winner.gamertag.to_s
                               @wins += set.wscore.to_i
                               @loses += set.lscore
                             else

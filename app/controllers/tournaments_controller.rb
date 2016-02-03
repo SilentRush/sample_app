@@ -1,16 +1,42 @@
 require 'web_scrapper'
+require 'create_new_tournament'
 class TournamentsController < ApplicationController
+  include GamesetsHelper
 
   def new
-    @tournament = Tournament.new()
     @player = Player.all
+  end
+
+  def createNewTournament
+    valid = true
+    @tournament = Tournament.new
+    if !params[:player].nil?
+      players = []
+      params[:player].each do |player|
+        players.push(player[:id])
+      end
+      if players.size > 2
+        @tournament = createTournament(@tournament, players, "something")
+        @tournament.gamesets.each do |set|
+          updateByes set
+        end
+        redirect_to tournament_path id: @tournament.id
+      else
+        flash[:error] = "Minimum players in a tournament is 3!"
+        valid = false;
+      end
+    else
+      flash[:error] = "Please enter players!"
+      valid = false
+    end
+    redirect_to new_tournament_path if !valid
   end
 
   def create
     @uri = URI.parse(params[:url])
     if @uri.host.eql? "smash.gg"
       if(params[:method] == "Create")
-        @tournament = createTournament(params[:url])
+        @tournament = importTournament(params[:url])
         if @tournament.valid?
           flash[:notice] = "Successfully Created Tournament!"
           redirect_to tournament_path id: @tournament.id
@@ -50,4 +76,5 @@ class TournamentsController < ApplicationController
       format.json { render json: set, status: :created }
     end
   end
+
 end

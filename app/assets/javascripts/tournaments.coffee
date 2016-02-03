@@ -282,7 +282,7 @@ $ ->
       delBtn.className = "delBtn glyphicon glyphicon-remove";
       span.innerHTML = gamertag.val();
       idInput = document.createElement("input");
-      idInput.setAttribute("name", gamertag.val());
+      idInput.setAttribute("name", "player[][id]");
       idInput.type = "hidden";
       idInput.value = id.val();
       $(row).append(seed);

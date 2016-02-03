@@ -1,10 +1,9 @@
-require "../config/environment"
 
-def createNewTournament(players, details)
+def createTournament(tournament, players, details)
   @size = players.size
   tsize = (2 ** (Math.log(@size, 2).ceil))
   pseedArr = seeding(@size)
-  @tournament = Tournament.new
+  @tournament = tournament
   @tournament.name = "Test 16 Players"
   @tournament.date =  "10/12/16"
   @tournament.description = "This is a test tournament"
@@ -13,8 +12,8 @@ def createNewTournament(players, details)
 
   pseedHash = {}
   players.each_with_index do |player,index|
-    currPlayer = Player.find_by(gamertag: player)
-    currPlayer = Player.create(gamertag: player, name: "", characters: "", wins: 0, loses: 0, winrate: 0) if currPlayer.nil?
+    currPlayer = Player.find(player)
+    #currPlayer = Player.create(gamertag: player, name: "", characters: "", wins: 0, loses: 0, winrate: 0) if currPlayer.nil?
     currPlayer.tournaments << @tournament
     currPlayer.save
     pseedHash["#{index + 1}"] = currPlayer
@@ -27,7 +26,7 @@ def createNewTournament(players, details)
   @tournament.gamesets.each do |set|
     puts set.inspect
   end
-
+  return @tournament
 end
 
 def initializeSets(seed, tsize, players)
@@ -134,10 +133,10 @@ def initializeSets(seed, tsize, players)
     l2 = Math.log(tsize, 2)
     losersRounds = (l2).ceil + Math.log(l2,2).ceil - 1
     totalP = 2**(l2.ceil)
-    losersRounds = 1 if tsize == 3
-    losersRounds = 2 if tsize == 4
-    losersRounds = 3 if tsize == 5 || tsize == 6
-    losersRounds = 4 if tsize == 7 || tsize == 8
+    losersRounds = 1 if @size == 3
+    losersRounds = 2 if @size == 4
+    losersRounds = 3 if @size == 5 || @size == 6
+    losersRounds = 4 if @size == 7 || @size == 8
 
     setsInRound = (tsize/2)/2
     losersRounds.times do |index|
@@ -204,10 +203,10 @@ def initializeSets(seed, tsize, players)
     losersRounds = (l2).ceil + Math.log(l2,2).ceil
     totalP = 2**(l2.ceil)
     losersRounds -= 1 if((totalP * 0.75) >= tsize)
-    losersRounds = 1 if tsize == 3
-    losersRounds = 2 if tsize == 4
-    losersRounds = 3 if tsize == 5 || tsize == 6
-    losersRounds = 4 if tsize == 7 || tsize == 8
+    losersRounds = 1 if @size == 3
+    losersRounds = 2 if @size == 4
+    losersRounds = 3 if @size == 5 || @size == 6
+    losersRounds = 4 if @size == 7 || @size == 8
 
     setsInRound = (tsize/2)/2
     losersRounds.times do |index|
@@ -378,7 +377,3 @@ def nextLayer(pls)
   end
   return out
 end
-
-player = ["1","2", "3", "4", "5", "6", "7", "8", "9", "10"]
-
-createNewTournament  player, "something"

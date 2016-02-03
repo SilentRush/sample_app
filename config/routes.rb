@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get 'players/autocomplete_player_gamertag'
   post 'tournaments/getSetData' => 'tournaments#getSetData'
   post 'players/new' => 'players#new'
+  post 'tournaments/createNewTournament' => 'tournaments#createNewTournament'
 
   resources :tournaments
   resources :gamesets
