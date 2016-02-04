@@ -45,7 +45,8 @@ def importTournament page
 
   @tournament.save
   params[:pcount].to_i.times do |i|
-      currPlayer = Player.create(gamertag: params["Player#{i}"], name: "", characters: "", wins: 0, loses: 0, winrate: 0)
+      currPlayer = Player.find_by(gamertag: params["Player#{i}"])
+      currPlayer = Player.create(gamertag: params["Player#{i}"], name: "", characters: "", wins: 0, loses: 0, winrate: 0) if currPlayer.nil?
       currPlayer.tournaments << @tournament
       currPlayer.save
   end
