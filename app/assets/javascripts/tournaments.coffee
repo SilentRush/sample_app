@@ -111,19 +111,19 @@ $ ->
               matchplayer.className = "match-player Win";
               $(matchplayerinput).val("Win");
               if $.inArray(match.wchar, chars) == -1
-                currcharimg.src = "/assets/characters/unknown.png";
+                currcharimg.src = "/assets/characters/unknowncs.png";
                 $(currcharinput).val("unknown");
               else
-                currcharimg.src = "/assets/characters/"+ match.wchar + ".png";
+                currcharimg.src = "/assets/characters/"+ match.wchar + "cs.png";
                 $(currcharinput).val(match.wchar);
             else
               matchplayer.className = "match-player Lose";
               $(matchplayerinput).val("Lose");
               if $.inArray(match.lchar, chars) == -1
-                currcharimg.src = "/assets/characters/unknown.png";
+                currcharimg.src = "/assets/characters/unknowncs.png";
                 $(currcharinput).val("unknown");
               else
-                currcharimg.src = "/assets/characters/"+ match.lchar + ".png";
+                currcharimg.src = "/assets/characters/"+ match.lchar + "cs.png";
                 $(currcharinput).val(match.lchar);
 
             $(currcharacter).append(currcharimg);
@@ -154,19 +154,19 @@ $ ->
               matchplayer.className = "match-player Win";
               $(matchplayerinput).val("Win");
               if $.inArray(match.wchar, chars) == -1
-                currcharimg.src = "/assets/characters/unknown.png";
+                currcharimg.src = "/assets/characters/unknowncs.png";
                 $(currcharinput).val("unknown");
               else
-                currcharimg.src = "/assets/characters/"+ match.wchar + ".png";
+                currcharimg.src = "/assets/characters/"+ match.wchar + "cs.png";
                 $(currcharinput).val(match.wchar);
             else
               matchplayer.className = "match-player Lose";
               $(matchplayerinput).val("Lose");
               if $.inArray(match.lchar, chars) == -1
-                currcharimg.src = "/assets/characters/unknown.png";
+                currcharimg.src = "/assets/characters/unknowncs.png";
                 $(currcharinput).val("unknown");
               else
-                currcharimg.src = "/assets/characters/"+ match.lchar + ".png";
+                currcharimg.src = "/assets/characters/"+ match.lchar + "cs.png";
                 $(currcharinput).val(match.lchar);
 
             $(currcharacter).append(currcharimg);

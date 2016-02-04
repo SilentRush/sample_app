@@ -8,7 +8,7 @@ module GamesetsHelper
 
     if lessthan
       if set.roundnum == 1
-        if set.topPlayer == bye || set.bottomPlayer == bye
+        if !bye.nil?  && (set.topPlayer == bye || set.bottomPlayer == bye)
           if set.topPlayer == bye
             set.toLoserSet.topPlayer = set.topPlayer
             set.toWinnerSet.bottomPlayer = set.bottomPlayer
@@ -21,7 +21,7 @@ module GamesetsHelper
         end
       end
       if set.roundnum == -1
-        if set.topPlayer == bye || set.bottomPlayer == bye
+        if !bye.nil?  && (set.topPlayer == bye || set.bottomPlayer == bye)
           if set.topPlayer == bye
             set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.bottomPlayer : set.toWinnerSet.topPlayer = set.bottomPlayer
           else
@@ -32,7 +32,7 @@ module GamesetsHelper
       end
     else
       if set.roundnum == 1
-        if set.topPlayer == bye || set.bottomPlayer == bye
+        if !bye.nil?  && (set.topPlayer == bye || set.bottomPlayer == bye)
           if set.topPlayer == bye
             (set.setnum % 2 == 0 ? set.toLoserSet.bottomPlayer = set.topPlayer : set.toLoserSet.topPlayer = set.topPlayer) if set.roundnum == 1
             set.setnum % 2 == 0 ? set.toWinnerSet.bottomPlayer = set.bottomPlayer : set.toWinnerSet.topPlayer = set.bottomPlayer
@@ -45,7 +45,7 @@ module GamesetsHelper
         end
       end
       if set.roundnum == -1
-        if set.topPlayer == bye || set.bottomPlayer == bye
+        if !bye.nil?  && (set.topPlayer == bye || set.bottomPlayer == bye)
           if set.topPlayer == bye
              set.toWinnerSet.bottomPlayer = set.bottomPlayer
           else

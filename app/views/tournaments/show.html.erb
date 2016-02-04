@@ -101,7 +101,7 @@
 
                     <%
                     bye = Player.find_by(gamertag: "bye")
-                    if set.topPlayer == bye || set.bottomPlayer == bye
+                    if !bye.nil? && (set.topPlayer == bye || set.bottomPlayer == bye)
                        %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
@@ -343,7 +343,7 @@
 
                     <%
                     bye = Player.find_by(gamertag: "bye")
-                    if set.topPlayer == bye || set.bottomPlayer == bye
+                    if !bye.nil? && (set.topPlayer == bye || set.bottomPlayer == bye)
                        %>
                       <div class="match_spacer" style="width: 50px;"></div>
                     <% else %>
