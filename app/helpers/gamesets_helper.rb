@@ -56,4 +56,9 @@ module GamesetsHelper
       end
     end
   end
+
+  def getUpdatedSets time, tournament
+    sets = Gameset.where("updated_at >= ? AND tournament_id = ?", Time.at(time/1000), tournament)
+    return sets
+  end
 end

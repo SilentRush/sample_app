@@ -48,7 +48,6 @@ class GamesetsController < ApplicationController
 
   def update
 
-
     @gameset = Gameset.find(params[:id])
     wscore = 0
     lscore = 0
@@ -92,39 +91,72 @@ class GamesetsController < ApplicationController
         flash[:error] = "This tournament is locked you can not switch the winner of any set."
       end
 
-    if valid
-      @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
-      puts @gameset.inspect
-      @gameset.gamematches.each do |match|
-        match.destroy
-      end
-      params[:matches].each_with_index do |m, index|
-        matchnum = index + 1
-        wchar = ""
-        lchar = ""
-        winner = Player
-        loser = Player
-        map = m[:map]
-        match = Gamematch
-        if m[:topPlayer].eql?("Win")
-          wchar = m[:topChar]
-          lchar = m[:bottomChar]
-          winner = Player.find_by(gamertag: params[:topPlayer])
-          loser = Player.find_by(gamertag: params[:bottomPlayer])
-          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
-        else
-          wchar = m[:bottomChar]
-          lchar = m[:topChar]
-          winner = Player.find_by(gamertag: params[:bottomPlayer])
-          loser = Player.find_by(gamertag: params[:topPlayer])
-          match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+      if valid
+        @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
+        puts @gameset.inspect
+        @gameset.gamematches.each do |match|
+          match.destroy
         end
-        match.save
+        params[:matches].each_with_index do |m, index|
+          matchnum = index + 1
+          wchar = ""
+          lchar = ""
+          winner = Player
+          loser = Player
+          map = m[:map]
+          match = Gamematch
+          if m[:topPlayer].eql?("Win")
+            wchar = m[:topChar]
+            lchar = m[:bottomChar]
+            winner = Player.find_by(gamertag: params[:topPlayer])
+            loser = Player.find_by(gamertag: params[:bottomPlayer])
+            match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          else
+            wchar = m[:bottomChar]
+            lchar = m[:topChar]
+            winner = Player.find_by(gamertag: params[:bottomPlayer])
+            loser = Player.find_by(gamertag: params[:topPlayer])
+            match = Gamematch.create(matchnum: matchnum, winner: winner, wchar: wchar, loser: loser, lchar: lchar, gameset_id: @gameset.id, map: map, invalidMatch: false, tournament_id: @gameset.tournament.id)
+          end
+          match.save
+        end
+        updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds && !@gameset.tournament.isIntegration
       end
-      updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds && !@gameset.tournament.isIntegration
+      sets = getUpdatedSets(params[:time].to_i, @gameset)
+      setArray = Array.new
+      sets.each do |set|
+        hash = {}
+        hash[:id] = set.id
+        !set.topPlayer.nil? ? hash[:topPlayer] = set.topPlayer.gamertag : hash[:topPlayer] = ""
+        !set.bottomPlayer.nil? ? hash[:bottomPlayer] = set.bottomPlayer.gamertag : hash[:bottomPlayer] = ""
+        !set.wscore.nil? ? hash[:wscore] = set.wscore : hash[:wscore] = ""
+        !set.lscore.nil? ? hash[:lscore] = set.lscore : hash[:lscore] = ""
+        !set.winner.nil? ? hash[:winner] = set.winner.gamertag : hash[:winner] = ""
+        !set.loser.nil? ? hash[:loser] = set.loser.gamertag : hash[:loser] = ""
+
+        wchar = []
+        lchar = []
+        set.gamematches.each do |match|
+          if match.winner == set.winner
+            wchar.push(match.wchar) if !wchar.include?(match.wchar)
+          else
+            wchar.push(match.lchar) if !wchar.include?(match.lchar)
+          end
+          if match.loser == set.loser
+            lchar.push(match.lchar) if !lchar.include?(match.lchar)
+          else
+            lchar.push(match.wchar) if !lchar.include?(match.wchar)
+          end
+        end
+
+        !wchar.blank? ? hash[:wchar] = wchar : hash[:wchar] = "unknown"
+        !lchar.blank? ? hash[:lchar] = lchar : hash[:lchar] = "unknown"
+        setArray.push(hash)
+      end
+      respond_to do |format|
+        format.json { render json: setArray.to_json, status: :created }
+      end
     end
-  end
-    redirect_to request.referer
   end
 
   def updateBracket set
@@ -218,10 +250,40 @@ class GamesetsController < ApplicationController
     return valid
   end
 
-end
+  def intervalUpdate
+    sets = getUpdatedSets(params[:time].to_i, params[:id].to_i)
+    setArray = Array.new
+    sets.each do |set|
+      hash = {}
+      hash[:id] = set.id
+      !set.topPlayer.nil? ? hash[:topPlayer] = set.topPlayer.gamertag : hash[:topPlayer] = ""
+      !set.bottomPlayer.nil? ? hash[:bottomPlayer] = set.bottomPlayer.gamertag : hash[:bottomPlayer] = ""
+      !set.wscore.nil? ? hash[:wscore] = set.wscore : hash[:wscore] = ""
+      !set.lscore.nil? ? hash[:lscore] = set.lscore : hash[:lscore] = ""
+      !set.winner.nil? ? hash[:winner] = set.winner.gamertag : hash[:winner] = ""
+      !set.loser.nil? ? hash[:loser] = set.loser.gamertag : hash[:loser] = ""
 
-class String
-    def is_i?
-       /\A[-+]?\d+\z/ === self
+      wchar = []
+      lchar = []
+      set.gamematches.each do |match|
+        if match.winner == set.winner
+          wchar.push(match.wchar) if !wchar.include?(match.wchar)
+        else
+          wchar.push(match.lchar) if !wchar.include?(match.lchar)
+        end
+        if match.loser == set.loser
+          lchar.push(match.lchar) if !lchar.include?(match.lchar)
+        else
+          lchar.push(match.wchar) if !lchar.include?(match.wchar)
+        end
+      end
+
+      !wchar.blank? ? hash[:wchar] = wchar : hash[:wchar] = "unknown"
+      !lchar.blank? ? hash[:lchar] = lchar : hash[:lchar] = "unknown"
+      setArray.push(hash)
     end
+    respond_to do |format|
+      format.json { render json: setArray.to_json, status: :created }
+    end
+  end
 end

@@ -182,6 +182,104 @@ $ ->
       error: ->
         $('#results').html("ERROR");
 
+  updateSet = (ele) ->
+    div = $("div").find("[data-id='" + ele.id + "']");
+    top = div.find(".match_top_half");
+    bot = div.find(".match_bottom_half");
+    topPlayer = top.find("span");
+    botPlayer = bot.find("span");
+    topScore = top.find(".top_score");
+    botScore = bot.find(".bottom_score");
+    topChar = top.find(".inner_content");
+    botChar = bot.find(".inner_content");
+    topChar.find("img").remove();
+    botChar.find("img").remove();
+    console.log(ele);
+    $(topPlayer).text(ele.topPlayer);
+    $(botPlayer).text(ele.bottomPlayer);
+    if ele.topPlayer == ele.winner && ele.winner != ""
+      $(topScore).html(ele.wscore);
+      $(topScore).addClass("winner");
+      $(botScore).html(ele.lscore);
+      $(botScore).removeClass("winner");
+      $(ele.wchar).each (index, char) ->
+        img = document.createElement("img");
+        if char == "" then char = "unknown"
+        $(img).attr("src","/assets/characters/" + char + "-icon.png");
+        $(img).attr("alt",char);
+        $(img).attr("class","bracket-charImg");
+        $(topChar).append(img);
+      $(ele.lchar).each (index, char) ->
+        img = document.createElement("img");
+        if char == "" then char = "unknown"
+        $(img).attr("src","/assets/characters/" + char + "-icon.png");
+        $(img).attr("alt",char);
+        $(img).attr("class","bracket-charImg");
+        $(botChar).append(img);
+    else
+      $(topScore).html(ele.lscore);
+      $(topScore).removeClass("winner");
+      $(botScore).html(ele.wscore);
+      $(botScore).addClass("winner");
+      $(ele.wchar).each (index, char) ->
+        img = document.createElement("img");
+        if char == "" then char = "unknown"
+        $(img).attr("src","/assets/characters/" + char + "-icon.png");
+        $(img).attr("alt",char);
+        $(img).attr("class","bracket-charImg");
+        $(botChar).append(img);
+      $(ele.lchar).each (index, char) ->
+        img = document.createElement("img");
+        if char == "" then char = "unknown"
+        $(img).attr("src","/assets/characters/" + char + "-icon.png");
+        $(img).attr("alt",char);
+        $(img).attr("class","bracket-charImg");
+        $(topChar).append(img);
+
+
+    console.log(ele.wchar);
+    console.log(ele.lchar);
+
+  updateWatcher = ->
+    setInterval ->
+      checkForUpdate();
+      date = new Date();
+      $('[name=time]').val(date);
+    , 30000
+
+  checkForUpdate = ->
+    date = new Date($('[name=time]').val());
+    $.ajax
+      url: "/gamesets/intervalUpdate"
+      type: "POST"
+      data:
+        id: $('[name=id]').val();
+        time: date.getTime()
+      success: (data, status, response) ->
+        $(data).each (index, set) ->
+          updateSet(set);
+      error: ->
+        $('#player-errors').html("ERROR");
+
+  updateWatcher();
+  $('#setform').submit (e) ->
+    e.preventDefault();
+    data = $('#setform').serializeArray();
+    date = new Date();
+    newdate = new Date(date.getTime() - 3*60000);
+    data[data.length] = { name: "time", value: newdate.getTime()};
+    $.ajax
+      url: $(this).attr("action")
+      type: "POST"
+      data: data
+      success: (data, status, response) ->
+        $(data).each (index, set) ->
+          updateSet(set);
+        $(".set-information").fadeOut ->
+          $(this).removeClass("show");
+      error: ->
+        $('#player-errors').html("ERROR");
+
   $(".clickable-set").click ->
     if $(".set-information").hasClass("show")
       $('.set-information').fadeOut ->

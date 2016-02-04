@@ -3,6 +3,8 @@
   <% end %>
   <h1><%= @tournament.name %></h1>
     <h2><%= @tournament.description %></h2>
+  <input type="hidden" name="time" value="<%= Time.now %>" />
+  <input type="hidden" name="id" value="<%= @tournament.id %>" />
 
 <div class="tabs">
   <ul class="tab-links">
@@ -501,7 +503,7 @@
         </div>
 
         <div id="" class="set-information">
-          <%= form_tag("/gamesets/update/", method: "post") do %>
+          <%= form_tag("/gamesets/update", id: "setform", method: "post") do %>
           <div class="set-table">
               <div class="set-title">
                   <div class="set-player top">
@@ -567,7 +569,7 @@
                               'https://www.youtube.com/channel/UCPX7XGzTNf-Rt_c_QLTuWEQ/videos', :target => "_blank" %>
                   <span class="set-info-editbtn">
                     <input type="hidden" name="matchCount" value="" />
-                    <%= submit_tag("Update", class: "btn btn-sm btn-primary") %>
+                    <%= submit_tag("Update",id: "updateSet", class: "btn btn-sm btn-primary") %>
                   </span>
                 </div>
               </div>

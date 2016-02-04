@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post 'tournaments/getSetData' => 'tournaments#getSetData'
   post 'players/new' => 'players#new'
   post 'tournaments/createNewTournament' => 'tournaments#createNewTournament'
+  post 'gamesets/intervalUpdate' => 'gamesets#intervalUpdate'
 
   resources :tournaments
   resources :gamesets
