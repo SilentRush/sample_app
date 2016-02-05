@@ -122,7 +122,8 @@ class GamesetsController < ApplicationController
         end
         updateBracket @gameset if @gameset.roundnum != @gameset.tournament.winnersRounds && !@gameset.tournament.isIntegration
       end
-      sets = getUpdatedSets(params[:time].to_i, @gameset)
+
+      sets = getUpdatedSets(params[:time].to_i, @gameset.tournament.id)
       setArray = Array.new
       sets.each do |set|
         hash = {}
@@ -153,6 +154,8 @@ class GamesetsController < ApplicationController
         !lchar.blank? ? hash[:lchar] = lchar : hash[:lchar] = "unknown"
         setArray.push(hash)
       end
+      puts @gameset.updated_at
+      puts Time.at(params[:time].to_i/1000)
       respond_to do |format|
         format.json { render json: setArray.to_json, status: :created }
       end
@@ -285,5 +288,12 @@ class GamesetsController < ApplicationController
     respond_to do |format|
       format.json { render json: setArray.to_json, status: :created }
     end
+  end
+
+end
+
+class String
+  def is_i?
+    /\A[-+]?\d+\z/ === self
   end
 end
