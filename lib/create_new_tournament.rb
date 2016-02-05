@@ -255,11 +255,7 @@ def updateSetTraversal(sets, tsize)
         elsif (index + 1) > 2 && (index + 1) < @tournament.winnersRounds - 2
           if (index + 1) % 2 == 0
             splitArr = sets.select{|x| x[:roundnum] == index + 1}
-            puts @tournament.winnersRounds
-            puts "here"
-            puts splitArr.size
             splitArr = splitArr.each_slice((splitArr.size/2.0).round).to_a
-            puts splitArr.size
             arr = splitArr[1] + splitArr[0]
             loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), arr[i].setnum, @tournament.id).first
             winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
@@ -270,7 +266,6 @@ def updateSetTraversal(sets, tsize)
             splitArr.each do |arr|
               arr.reverse!
             end
-            puts splitArr.to_s
             arr = splitArr[0] + splitArr[1]
             loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), arr[i].setnum, @tournament.id).first
             winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
@@ -320,22 +315,40 @@ def updateSetTraversal(sets, tsize)
           loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1), setsInReverse[i].setnum, @tournament.id).first
           winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
           set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
-        else
+        elsif (index + 1) > 2 && (index + 1) < @tournament.winnersRounds - 2
           if (index + 1) % 2 == 0
-            setsInReverse = sets.select{|x| x[:roundnum] == index + 1}.reverse
-            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), setsInReverse[i].setnum, @tournament.id).first
+            splitArr = sets.select{|x| x[:roundnum] == index + 1}
+            splitArr = splitArr.each_slice((splitArr.size/2.0).round).to_a
+            arr = splitArr[1] + splitArr[0]
+            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), arr[i].setnum, @tournament.id).first
             winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
             set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
           else
-            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), set.setnum, @tournament.id).first
+            splitArr = sets.select{|x| x[:roundnum] == index + 1}
+            splitArr = splitArr.each_slice((splitArr.size/2.0).round).to_a
+            splitArr.each do |arr|
+              arr.reverse!
+            end
+            arr = splitArr[0] + splitArr[1]
+            puts "\n\n\n SPLIT ARRAY"
+            puts splitArr[0].to_s
+            puts splitArr[1].to_s
+            puts "\n\n\n\n\n\n"
+            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -(index + 1 + count), arr[i].setnum, @tournament.id).first
             winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), (set.setnum.to_f/2).ceil, @tournament.id).first
             set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
           end
-        end
-        if (index + 1) == @tournament.winnersRounds - 1
-          winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
-          loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
-          set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+        else
+          if (index + 1) == @tournament.winnersRounds - 2
+            winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
+            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", -@tournament.losersRounds, set.setnum, @tournament.id).first
+            set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+          end
+          if (index + 1) == @tournament.winnersRounds - 1
+            winnerSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
+            loserSet = Gameset.where("roundnum = ? AND setnum = ? AND tournament_id = ?", (index + 2), set.setnum, @tournament.id).first
+            set.update(toLoserSet: loserSet, toWinnerSet: winnerSet) if !loserSet.nil? && !winnerSet.nil?
+          end
         end
       end
       count += 1 if index != 0 && index != 1
