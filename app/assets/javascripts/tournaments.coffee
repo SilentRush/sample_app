@@ -2,8 +2,12 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 tournamentVars = {};
+updateInterval = "";
 
 $ ->
+  clearInterval(updateInterval);
+
+$(".tournaments.show").ready ->
   $(".clickable-row").click ->
     $("[id=" + $(this).data("id") + "]").toggle();
 
@@ -13,7 +17,6 @@ $ ->
 
   sortrow = () ->
     $(".player-row").each (index,row) ->
-      console.log($(row).find(".seed"));
       $(row).find(".seed").html(index + 1 + ". ");
 
   $("#sortable").on("sortstop", (e,ui) ->
@@ -29,27 +32,6 @@ $ ->
   getmaplist = (map) ->
     map = ["battlefield","dreamland","finaldestination","fountainofdreams","pokemonstadium","yoshistory"];
     return map;
-
-  $('#createPlayer').click ->
-    $.ajax
-      url: "/players/new"
-      type: "POST"
-      data:
-        gamertag: $('#player_gamertag').val();
-      success: (data, status, response) ->
-        if data.id == null
-          $('#player-errors').html(data.error);
-          $('#player_gamertag').css({"outline":"none","border-color":"#FF3B3B","box-shadow":"0 0 10px #FF3B3B"});
-        else
-          $('#search').val(data.gamertag);
-          $('#id').val(data.id);
-        $('.create-player').hide();
-      error: ->
-        $('#player-errors').html("ERROR");
-        $('.create-player').hide();
-
-  $('.createPlayer').click ->
-    $('.create-player').toggle();
 
   loadSetInformation = (ele) ->
     $.ajax
@@ -176,7 +158,7 @@ $ ->
             $(matchrow).append(matchcharacter).append(matchplayer);
 
             $('.set-match-container').append(matchrow);
-
+          box.find("#url-link").attr("href","/gamesets/" + data.id);
           box.toggleClass("show");
           box.css("margin-top",-(box.height()/2));
       error: ->
@@ -194,7 +176,6 @@ $ ->
     botChar = bot.find(".inner_content");
     topChar.find("img").remove();
     botChar.find("img").remove();
-    console.log(ele);
     $(topPlayer).text(ele.topPlayer);
     $(botPlayer).text(ele.bottomPlayer);
     if ele.topPlayer == ele.winner && ele.winner != ""
@@ -236,12 +217,8 @@ $ ->
         $(img).attr("class","bracket-charImg");
         $(topChar).append(img);
 
-
-    console.log(ele.wchar);
-    console.log(ele.lchar);
-
   updateWatcher = ->
-    setInterval ->
+    updateInterval = setInterval ->
       checkForUpdate();
       date = new Date();
       $('[name=time]').val(date);
@@ -262,6 +239,7 @@ $ ->
         $('#player-errors').html("ERROR");
 
   updateWatcher();
+
   $('#setform').submit (e) ->
     e.preventDefault();
     data = $('#setform').serializeArray();
@@ -301,8 +279,11 @@ $ ->
     $(this).parent('li').addClass('active').siblings().removeClass('active');
     event.preventDefault();
 
-  $(".plus").click ->
-    parent = $(this).parent().parent().parent();
+  $(".set-information").on "click", "#create-url", ->
+    $(".create-url").toggle();
+
+  $(".set-information").on "click", ".plus", ->
+    parent = $(".set-information");
     id = parent.find(".match-row").length + 1;
     div = parent.find(".set-match-container");
     html = "<div class=\"match-row\">
@@ -313,14 +294,13 @@ $ ->
       newRow = div.find(".match-row").last();
       parent.find("[name=matchCount]").attr("value", id);
 
-  $(".minus").click ->
-    parent = $(this).parent().parent().parent();
+  $(".set-information").on "click", ".minus", ->
+    parent = $(".set-information");
     div = parent.find(".set-match-container");
     row = div.find(".match-row");
     if(row.length > 1)
       row.last().remove();
     id = parent.find(".match-row").length;
-    console.log(id);
     parent.find("[name=matchCount]").attr("value", id);
 
   $(".set-match-container").on "click", ".currentMap", ->
@@ -360,6 +340,27 @@ $ ->
     lose.find("input").attr("value", "Lose");
     win.find("input").attr("value", "Win");
 
+  $("#url-link").hover ->
+    #$(this).find("img").attr("src","/assets/youtubehover.png");
+
+$(".tournaments.new").ready ->
+  $('.createPlayer').click ->
+    $.ajax
+      url: "/players/new"
+      type: "POST"
+      data:
+        gamertag: $('#search').val();
+      success: (data, status, response) ->
+        if data.id == null
+          $('#player-errors').html(data.error);
+          $('#search').css({"outline":"none","border-color":"#FF3B3B","box-shadow":"0 0 10px #FF3B3B"});
+        else
+          $('#search').css("");
+          $('#id').val(data.id);
+          $(".addPlayer").click();
+      error: ->
+        $('#player-errors').html("ERROR");
+
   $("#search").on('keypress', ((e) ->
     if e.keyCode == 13
       $(".addPlayer").click();
@@ -368,8 +369,6 @@ $ ->
   $(".addPlayer").click ->
     gamertag = $('#search')
     id = $('[name=id]');
-    console.log(id.val());
-    console.log(gamertag.val());
     if(id.val() != "")
       row = document.createElement("div");
       row.className = "player-row";

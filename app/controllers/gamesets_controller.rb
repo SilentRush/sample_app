@@ -58,6 +58,7 @@ class GamesetsController < ApplicationController
     wscore = 0
     lscore = 0
     valid = true
+    url = params[:url]
 
     if validateSet
 
@@ -92,7 +93,7 @@ class GamesetsController < ApplicationController
       end
 
       if valid
-        @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser)
+        @gameset.update(wscore: wscore, lscore: lscore, winner: winner, loser: loser, url: url)
         puts @gameset.inspect
         @gameset.gamematches.each do |match|
           match.destroy

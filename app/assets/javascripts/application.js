@@ -18,4 +18,5 @@
 //= require dragscroll
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require jquery-readyselector
 //= require_tree .

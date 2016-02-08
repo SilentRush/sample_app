@@ -1,0 +1,65 @@
+<h1>Filter Player Statistics</h1>
+
+<form role="form" class="form-inline">
+  <div class="form-group">
+    <label>Main Player: </label>
+    <input type="text" name="mainplayer" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Character: </label>
+    <span class="currentChar"><img class="charfilter" src="/assets/characters/unknowncs.png"></span>
+    <input type="hidden" name="maincharacter" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Stage: </label>
+    <span class="currentMap"><img class="mapfilter" src="/assets/maps/unknown.png"></span>
+    <input type="hidden" name="mainstage" class="form-control" />
+  </div>
+  <div class="form-group">
+    <label>Date Range: </label>
+    <input class="datepicker form-control" data-provide='datepicker' type="text" name="dateone" />
+    <input class="datepicker form-control" data-provide='datepicker' type="text" name="datetwo" />
+  </div>
+</form>
+
+
+<div class="char-list">
+  <%= image_tag("characters/drmariocs.png", alt: "drmario", class: "selectedChar") %>
+  <%= image_tag("characters/mariocs.png", alt: "mario", class: "selectedChar") %>
+  <%= image_tag("characters/luigics.png", alt: "luigi", class: "selectedChar") %>
+  <%= image_tag("characters/bowsercs.png", alt: "bowser", class: "selectedChar") %>
+  <%= image_tag("characters/peachcs.png", alt: "peach", class: "selectedChar") %>
+  <%= image_tag("characters/yoshics.png", alt: "yoshi", class: "selectedChar") %>
+  <%= image_tag("characters/dkcs.png", alt: "dk", class: "selectedChar") %>
+  <%= image_tag("characters/captainfalconcs.png", alt: "captainfalcon", class: "selectedChar") %>
+  <%= image_tag("characters/ganondorfcs.png", alt: "ganondorf", class: "selectedChar") %>
+
+  <%= image_tag("characters/falcocs.png", alt: "falco", class: "selectedChar") %>
+  <%= image_tag("characters/foxcs.png", alt: "fox", class: "selectedChar") %>
+  <%= image_tag("characters/nesscs.png", alt: "ness", class: "selectedChar") %>
+  <%= image_tag("characters/iceclimberscs.png", alt: "iceclimbers", class: "selectedChar") %>
+  <%= image_tag("characters/kirbycs.png", alt: "kirby", class: "selectedChar") %>
+  <%= image_tag("characters/samuscs.png", alt: "samus", class: "selectedChar") %>
+  <%= image_tag("characters/sheikcs.png", alt: "sheik", class: "selectedChar") %>
+  <%= image_tag("characters/linkcs.png", alt: "link", class: "selectedChar") %>
+  <%= image_tag("characters/younglinkcs.png", alt: "younglink", class: "selectedChar") %>
+
+  <%= image_tag("characters/unknowncs.png", alt: "unknown", class: "selectedChar") %>
+  <%= image_tag("characters/pichucs.png", alt: "pichu", class: "selectedChar") %>
+  <%= image_tag("characters/pikachucs.png", alt: "pikachu", class: "selectedChar") %>
+  <%= image_tag("characters/jigglypuffcs.png", alt: "jigglypuff", class: "selectedChar") %>
+  <%= image_tag("characters/mewtwocs.png", alt: "mewtwo", class: "selectedChar") %>
+  <%= image_tag("characters/mrgamewatchcs.png", alt: "mrgamewatch", class: "selectedChar") %>
+  <%= image_tag("characters/marthcs.png", alt: "marth", class: "selectedChar") %>
+  <%= image_tag("characters/roycs.png", alt: "roy", class: "selectedChar") %>
+  <%= image_tag("characters/zeldacs.png", alt: "zelda", class: "selectedChar") %>
+</div>
+
+<div class="map-list">
+  <%= image_tag("maps/battlefield.png", alt: "battlefield", class: "selectedMap") %>
+  <%= image_tag("maps/dreamland.png", alt: "dreamland", class: "selectedMap") %>
+  <%= image_tag("maps/finaldestination.png", alt: "finaldestination", class: "selectedMap") %>
+  <%= image_tag("maps/fountainofdreams.png", alt: "fountainofdreams", class: "selectedMap") %>
+  <%= image_tag("maps/pokemonstadium.png", alt: "pokemonstadium", class: "selectedMap") %>
+  <%= image_tag("maps/yoshistory.png", alt: "yoshistory", class: "selectedMap") %>
+</div>

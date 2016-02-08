@@ -3,20 +3,6 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 $imgSize: 40px;
 
-a:link {
-  color: white;
-}
-a:visited {
-  color: white;
-}
-a:hover {
-  color: #006680;
-  text-decoration: none;
-}
-a:active {
-  color: white;
-}
-
 a.tlink {
   color:#125988;
 }
@@ -145,6 +131,7 @@ img.bracket-charImg {
   overflow-x: scroll;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  padding-left: 4px;
   cursor: move;
     font-family: Arial, sans-serif;
     @-moz-document url-prefix() {
@@ -969,7 +956,7 @@ div.match-player{
 }
 
 div.set-url{
-  padding-left:20px;
+  padding-left:5px;
   display: table-cell;
 }
 
@@ -1166,6 +1153,26 @@ div.create-player{
 span.seed {
   padding-right: 4px;
 }
+
+div.create-url{
+  display: none;
+  padding: 5px;
+}
+
+a.url-link {
+  color:black !important;
+}
+
+a.url-link:hover {
+  color: #666;
+}
+
+img.linkIcons:hover {
+  content: url("/assets/youtubehover.png");
+  box-shadow: 0 0 12px #1344B1;
+}
+
+
 
 @media (max-width:600px)
 {

@@ -7,6 +7,7 @@ class CreatePlayers < ActiveRecord::Migration
       t.integer :wins
       t.integer :loses
       t.integer :winrate
+      t.string :create_user_id
 
       t.timestamps null: false
     end

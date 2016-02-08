@@ -7,6 +7,7 @@ def createTournament(tournament, players, details)
   @tournament.name = "Test 16 Players"
   @tournament.date =  "10/12/16"
   @tournament.description = "This is a test tournament"
+  @tournament.create_user = current_user
   #@tournament.url = "http://test.test.com"
   @tournament.save
 
@@ -93,6 +94,7 @@ def initializeSets(seed, tsize, players)
       count = 0
       setsInRound.times do |i|
         set = Gameset.new()
+        set.create_user = current_user
         if index == 0
           topPlayer = players["#{seed[count]}"]
           bottomPlayer = players["#{seed[count+1]}"]
@@ -111,6 +113,7 @@ def initializeSets(seed, tsize, players)
         set.tournament = @tournament
         set.save
         match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+        match.create_user = current_user
         match.save
         setsArr.push(set)
         count += 2
@@ -119,11 +122,15 @@ def initializeSets(seed, tsize, players)
       firstTime = false
     end
     grandSetOne = Gameset.new(setnum: 1, roundnum: winnersRounds + 1, tournament_id: @tournament.id)
+    grandSetOne.create_user = current_user
     grandSetTwo = Gameset.new(setnum: 1, roundnum: winnersRounds + 2, tournament_id: @tournament.id)
+    grandSetTwo.create_user = current_user
     grandSetOne.save
     grandSetTwo.save
     match1 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetOne, wchar: "", lchar: "", map: "")
     match2 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetTwo, wchar: "", lchar: "", map: "")
+    match1.create_user = current_user
+    match2.create_user = current_user
     match1.save
     match2.save
     setsArr.push(grandSetOne)
@@ -143,11 +150,13 @@ def initializeSets(seed, tsize, players)
       count = 0
       setsInRound.times do |i|
         set = Gameset.new()
+        set.create_user = current_user
         set.setnum = i + 1
         set.roundnum = -(index + 1)
         set.tournament = @tournament
         set.save
         match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+        match.create_user = current_user
         match.save
         setsArr.push(set)
       end
@@ -168,6 +177,7 @@ def initializeSets(seed, tsize, players)
       count = 0
       setsInRound.times do |i|
         set = Gameset.new()
+        set.create_user = current_user
         if index == 0
           topPlayer = players["#{seed[count]}"]
           bottomPlayer = players["#{seed[count+1]}"]
@@ -181,6 +191,7 @@ def initializeSets(seed, tsize, players)
         set.tournament = @tournament
         set.save
         match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+        match.create_user = current_user
         match.save
         setsArr.push(set)
         count += 2
@@ -189,10 +200,14 @@ def initializeSets(seed, tsize, players)
     end
     grandSetOne = Gameset.new(setnum: 1, roundnum: winnersRounds + 1, tournament_id: @tournament.id)
     grandSetTwo = Gameset.new(setnum: 1, roundnum: winnersRounds + 2, tournament_id: @tournament.id)
+    grandSetOne.create_user = current_user
+    grandSetTwo.create_user = current_user
     grandSetOne.save
     grandSetTwo.save
     match1 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetOne, wchar: "", lchar: "", map: "")
     match2 = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: grandSetTwo, wchar: "", lchar: "", map: "")
+    match1.create_user = current_user
+    match2.create_user = current_user
     match1.save
     match2.save
     setsArr.push(grandSetOne)
@@ -213,11 +228,13 @@ def initializeSets(seed, tsize, players)
       count = 0
       setsInRound.times do |i|
         set = Gameset.new()
+        set.create_user = current_user
         set.setnum = i + 1
         set.roundnum = -(index + 1)
         set.tournament = @tournament
         set.save
         match = Gamematch.new(matchnum: 1, invalidMatch: true, gameset: set, wchar: "", lchar: "", map: "")
+        match.create_user = current_user
         match.save
         setsArr.push(set)
       end

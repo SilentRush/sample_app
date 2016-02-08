@@ -18,6 +18,7 @@ def importTournament page
   @parse_page = Nokogiri::HTML(@page)
   #create @tournament
   @tournament = Tournament.new
+  @tournament.create_user = current_user
 
   tname = @parse_page.css('.tourney-details-affix-title').text
   tdate = @parse_page.css('.tourney-details-affix').css('div').last.text
@@ -88,7 +89,8 @@ def importTournament page
         if m.text.blank?
           #blankplayer = Player.create(gamertag: "blankmatchbye", name: "blankmatchbye", characters: "", wins: 0, loses: 0, winrate: 0)
           #blankplayer = Player.find(gamertag: "blankmatchbye") if !blankplayer.save
-          currSet = Gameset.create(roundnum: round, setnum: setNum, winner: nil, loser: nil, topPlayer: nil, bottomPlayer: nil, wscore: nil, lscore: nil, tournament_id: @tournament.id)
+          currSet = Gameset.new(roundnum: round, setnum: setNum, winner: nil, loser: nil, topPlayer: nil, bottomPlayer: nil, wscore: nil, lscore: nil, tournament_id: @tournament.id)
+          currSet.create_user = current_user
           currSet.save
         else
           match = m.css('.match-affix-wrapper')
@@ -141,7 +143,8 @@ def importTournament page
 
 
 
-          currSet = Gameset.create(roundnum: round, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
+          currSet = Gameset.new(roundnum: round, setnum: setNum, winner: winner, loser: loser, topPlayer: topPlayer, bottomPlayer: bottomPlayer, wscore: wscore, lscore: lscore, tournament_id: @tournament.id)
+          currSet.create_user = current_user
           winner.gamesets << currSet
           loser.gamesets << currSet
           currSet.save
@@ -151,15 +154,18 @@ def importTournament page
           if((wscore.to_i + lscore.to_i).to_i > 0)
             (wscore.to_i + lscore.to_i).times do |i|
               if(i < wscore)
-                currMatch = Gamematch.create(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+                currMatch = Gamematch.new(matchnum: i + 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+                currMatch.create_user = current_user
                 currMatch.save
               else
-                currMatch = Gamematch.create(matchnum: i + 1, winner: loser, wchar: lchars.join(","), loser: winner, lchar: wchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+                currMatch = Gamematch.new(matchnum: i + 1, winner: loser, wchar: lchars.join(","), loser: winner, lchar: wchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: false, tournament_id: @tournament.id)
+                currMatch.create_user = current_user
                 currMatch.save
               end
             end
           else
-            currMatch = Gamematch.create(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: true, tournament_id: @tournament.id)
+            currMatch = Gamematch.new(matchnum: 1, winner: winner, wchar: wchars.join(","), loser: loser, lchar: lchars.join(","), gameset_id: currSet.id, map: "", invalidMatch: true, tournament_id: @tournament.id)
+            currMatch.create_user = current_user
             currMatch.save
           end
         end

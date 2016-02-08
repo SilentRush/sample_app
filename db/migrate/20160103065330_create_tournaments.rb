@@ -8,6 +8,7 @@ class CreateTournaments < ActiveRecord::Migration
       t.integer :winnersRounds
       t.integer :losersRounds
       t.boolean :isIntegration
+      t.string :create_user_id
 
       t.timestamps null: false
     end

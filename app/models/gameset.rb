@@ -6,5 +6,6 @@ class Gameset < ActiveRecord::Base
   belongs_to :bottomPlayer, :class_name => 'Player', :foreign_key => 'bottomPlayer_id'
   belongs_to :toWinnerSet, :class_name => 'Gameset', :foreign_key => 'toWinnerSet_id'
   belongs_to :toLoserSet, :class_name => 'Gameset', :foreign_key => 'toLoserSet_id'
+  belongs_to :create_user, :class_name => 'User', :foreign_key => 'create_user_id'
   has_many :gamematches, dependent: :destroy
 end

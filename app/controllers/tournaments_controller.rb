@@ -71,6 +71,7 @@ class TournamentsController < ApplicationController
       matches.push match.as_json
     end
     set["matches"] = matches
+    set["url"] = @set.url
 
     respond_to do |format|
       format.json { render json: set, status: :created }

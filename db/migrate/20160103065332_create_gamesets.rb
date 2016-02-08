@@ -12,6 +12,7 @@ class CreateGamesets < ActiveRecord::Migration
       t.integer :wscore
       t.integer :lscore
       t.references :tournament, index: true, foreign_key: true
+      t.string :create_user_id
 
       t.timestamps null: false
     end

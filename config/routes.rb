@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  devise_for :admins
+  devise_for :users
+  get 'users/new'
+
   get 'parseTournament' => 'parse_tournament#parse'
   post 'parseTournament' => 'parse_tournament#parse'
 
@@ -9,6 +14,7 @@ Rails.application.routes.draw do
   post 'players/new' => 'players#new'
   post 'tournaments/createNewTournament' => 'tournaments#createNewTournament'
   post 'gamesets/intervalUpdate' => 'gamesets#intervalUpdate'
+  get 'queryData' => 'query_data#query'
 
   resources :tournaments
   resources :gamesets
@@ -17,6 +23,8 @@ Rails.application.routes.draw do
 
   post 'gamesets/update/:id' => 'gamesets#update'
 
+  match '/contacts',     to: 'contacts#new',             via: 'get'
+  resources "contacts", only: [:new, :create]
 
   root             'static_pages#home'
   get 'help'    => 'static_pages#help'
@@ -24,7 +32,6 @@ Rails.application.routes.draw do
   get 'contact' => 'static_pages#contact'
   #get 'parseTournament' => 'static_pages#parseTournament'
   get 'createTournament' => 'static_pages#createTournament'
-  get 'signup'  => 'users#new'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
